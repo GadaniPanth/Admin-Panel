@@ -1,0 +1,182 @@
+<div class="app_wrapper">
+  <div class="main-sidebar">
+    <div class="tab-container">
+      <div class="logo">
+        <h2 class="text-center">Admin Panel</h2>
+        <!-- <img src="assets/images/dark-logo.svg" alt="" /> -->
+      </div>
+      <div class="nav-tabs">
+        <div class="tabs">
+          <button [routerLink]="'/dashboard'" (click)="setTab('dashboard')" [class.active]="activeTab == 'dashboard'">
+            <div class="home-main">
+              <div class="home-icon">
+                <span class="material-symbols-outlined"> dashboard </span>
+              </div>
+              <div class="home-title font-16">Dashboard</div>
+            </div>
+          </button>
+          <button [routerLink]="'/users'" (click)="setTab('users')" [class.active]="activeTab == 'users'">
+            <div class="home-main">
+              <div class="home-icon">
+                <span class="material-symbols-outlined"> account_circle </span>
+              </div>
+              <div class="home-title font-16">User</div>
+            </div>
+          </button>
+          <button [routerLink]="'/inquiry'" (click)="setTab('inquiry')" [class.active]="activeTab == 'inquiry'">
+            <div class="home-main">
+              <div class="home-icon">
+                <span class="material-symbols-outlined"> view_list </span>
+              </div>
+              <div class="home-title font-16">Inquiry</div>
+            </div>
+          </button>
+          <button [routerLink]="'/list-form'" (click)="setTab('List Form')"
+            [class.active]="activeTab == 'List Form'">
+            <div class="home-main">
+              <div class="home-icon">
+                <span class="material-symbols-outlined"> list_alt </span>
+              </div>
+              <div class="home-title font-16">Form</div>
+            </div>
+          </button>
+          <!-- <button (click)="setTab('home')" [class.active]="activeTab === 'home'">
+            <div class="home-main">
+              <div class="home-icon">
+                <span class="material-symbols-outlined"> analytics </span>
+              </div>
+              <div class="home-title">Analytics</div>
+            </div>
+          </button>
+          <button (click)="setTab('analytics')" [class.active]="activeTab === 'analytics'">
+            <div class="home-main">
+              <div class="home-icon">
+                <span class="material-symbols-outlined">
+                  remove_shopping_cart
+                </span>
+              </div>
+              <div class="home-title">eCommerce</div>
+            </div>
+          </button>
+          <button (click)="setTab('chat')" [class.active]="activeTab === 'chat'">
+            <div class="home-main">
+              <div class="home-icon">
+                <span class="material-symbols-outlined"> chat </span>
+              </div>
+              <div class="home-title">Chat</div>
+            </div>
+          </button>
+          <button (click)="setTab('calendar')" [class.active]="activeTab === 'calendar'">
+            <div class="home-main">
+              <div class="home-icon">
+                <span class="material-symbols-outlined"> calendar_today </span>
+              </div>
+              <div class="home-title">Calendar</div>
+            </div>
+          </button>
+          <button (click)="setTab('email')" [class.active]="activeTab === 'email'">
+            <div class="home-main">
+              <div class="home-icon">
+                <span class="material-symbols-outlined"> email </span>
+              </div>
+              <div class="home-title">Email</div>
+            </div>
+          </button>
+          <button (click)="setTab('call')" [class.active]="activeTab === 'call'">
+            <div class="home-main">
+              <div class="home-icon">
+                <span class="material-symbols-outlined"> call </span>
+              </div>
+              <div class="home-title">Call</div>
+            </div>
+          </button>
+          <button (click)="setTab('notes')" [class.active]="activeTab === 'notes'">
+            <div class="home-main">
+              <div class="home-icon">
+                <span class="material-symbols-outlined"> docs </span>
+              </div>
+              <div class="home-title">Notes</div>
+            </div>
+          </button>
+          <button (click)="setTab('ticket')" [class.active]="activeTab === 'ticket'">
+            <div class="home-main">
+              <div class="home-icon">
+                <span class="material-symbols-outlined"> local_activity </span>
+              </div>
+              <div class="home-title">Ticket</div>
+            </div>
+          </button>
+          <button (click)="setTab('contact_list')" [class.active]="activeTab === 'contact_list'">
+            <div class="home-main">
+              <div class="home-icon">
+                <span class="material-symbols-outlined"> call </span>
+              </div>
+              <div class="home-title">Contact list</div>
+            </div>
+          </button>
+          <button (click)="setTab('account_setting')" [class.active]="activeTab === 'account_setting'">
+            <div class="home-main">
+              <div class="home-icon">
+                <span class="material-symbols-outlined"> person </span>
+              </div>
+              <div class="home-title">Accound setting</div>
+            </div>
+          </button>
+          <button (click)="setTab('blog')" [class.active]="activeTab === 'blog'">
+            <div class="home-main">
+              <div class="home-icon">
+                <span class="material-symbols-outlined"> dynamic_feed </span>
+              </div>
+              <div class="home-title">Blog</div>
+            </div>
+          </button>
+          <button (click)="setTab('todo')" [class.active]="activeTab === 'todo'">
+            <div class="home-main">
+              <div class="home-icon">
+                <span class="material-symbols-outlined"> edit_note </span>
+              </div>
+              <div class="home-title">ToDo</div>
+            </div>
+          </button> -->
+        </div>
+      </div>
+    </div>
+
+    <div class="profile">
+      <div class="profile-img">
+        <img src="assets/images/user-1.jpg" alt="" />
+      </div>
+      <div class="profile-detail inner-flex">
+        <!-- <h4>Admin</h4> -->
+        <h4 class="capitalize">{{ adminService.getTokenData() ? adminService.getTokenData().name : "User"}}</h4>
+        <!-- <p>Designer</p> -->
+        <p class="font-12">{{ adminService.getTokenData() ? adminService.getTokenData().designation : ""}}</p>
+      </div>
+      <div class="profile-logout cursor_pointer" (click)="logout()">
+        <span class="material-symbols-outlined"> power_settings_new </span>
+      </div>
+    </div>
+  </div>
+  <div class="router_outlet" #content_wrapper>
+    <div class="flex">
+      <div class="row-flex alc gap-1rem">
+        <img src="assets/images/user-1.jpg" alt="" />
+        <!-- <span  class="material-symbols-outlined"> account_circle </span> -->
+        <!-- <h2 class="font-16">Admin</h2> -->
+        <h2 class="font-16 capitalize"> {{ adminService.getTokenData() ? adminService.getTokenData().name : "User"}}
+        </h2>
+      </div>
+      <!-- <div class="logout cursor_pointer" (click)="logout()">
+        <span _ngcontent-ntx-c3="" class="material-symbols-outlined">
+          logout
+        </span>
+      </div> -->
+    </div>
+    <!-- <ng-container *ngIF></ng-container> -->
+
+    <!-- <h2 class="heading_text tab_name font-18">{{ activeTabName }} <span *ngIf="activeTabName == 'Dashboard'"> {{ inquiryCount }}</span> </h2> -->
+    <div class="outlet_container">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</div>

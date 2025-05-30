@@ -1,0 +1,515 @@
+@import "~@ng-select/ng-select/themes/default.theme.css";
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+@font-face {
+  font-family: "Plus-Jakarta-Light";
+  src: url("assets/fonts/jakarta/PlusJakartaSans-Light.woff2") format("woff2"),
+    url("assets/fonts/jakarta/PlusJakartaSans-Light.woff") format("woff");
+  font-weight: 100;
+  font-display: swap;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Plus-Jakarta-Regular";
+  src: url("assets/fonts/jakarta/PlusJakartaSans-Regular.woff2") format("woff2"),
+    url("assets/fonts/jakarta/PlusJakartaSans-Regular.woff") format("woff");
+  font-weight: 400;
+  font-display: swap;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Plus-Jakarta-Medium";
+  src: url("assets/fonts/jakarta/PlusJakartaSans-Medium.woff2") format("woff2"),
+    url("assets/fonts/jakarta/PlusJakartaSans-Medium.woff") format("woff");
+  font-weight: 500;
+  font-display: swap;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Plus-Jakarta-SemiBold";
+  src: url("assets/fonts/jakarta/PlusJakartaSans-SemiBold.woff2")
+      format("woff2"),
+    url("assets/fonts/jakarta/PlusJakartaSans-SemiBold.woff") format("woff");
+  font-weight: 600;
+  font-display: swap;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Plus-Jakarta-Bold";
+  src: url("src/assets/fonts/jakarta/PlusJakartaSans-Bold.woff2")
+      format("woff2"),
+    url("assets/fonts/jakarta/PlusJakartaSans-Bold.woff") format("woff");
+  font-weight: 700;
+  font-display: swap;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Plus-Jakarta-ExtraBold";
+  src: url("assets/fonts/jakarta/PlusJakartaSans-ExtraBold.woff2")
+      format("woff2"),
+    url("assets/fonts/jakarta/PlusJakartaSans-ExtraBold.woff") format("woff");
+  font-weight: 800;
+  font-display: swap;
+  font-style: normal;
+}
+
+html,
+body {
+  height: 100%;
+  width: 100%;
+}
+
+body {
+  font-family: "Plus-Jakarta-Regular";
+  background-color: #f6f6f6;
+}
+
+body.no-scroll-body {
+  overflow: hidden;
+}
+
+:root {
+  /* --primary-color: #db4444; */
+  --blue-color: #0083ff;
+  --black-color: #111111;
+  --white-color: #fff;
+  --common-transition: all 0.2s ease-in-out;
+  --common-border-radius: 0.5rem;
+
+  /* font family */
+  --regular-font: "Plus-Jakarta-Regular";
+  --medium-font: "Plus-Jakarta-Medium";
+  --semibold-font: "Plus-Jakarta-SemiBold";
+  --bold-font: "Plus-Jakarta-Bold";
+}
+
+/* You can add global styles to this file, and also import other style files */
+/** For Shimmer **/
+.image_loader {
+  background-color: #f6f7f8;
+  width: 100%;
+  min-height: 800px;
+}
+
+.image-card.skeleton-loader {
+  background-color: #f6f7f8;
+}
+
+.shine {
+  background: #f6f7f8;
+  /* background-image: linear-gradient(to right, #000000 0%, #edeef1 20%, #f6f7f8 40%, #f6f7f8 100%); */
+  background-image: linear-gradient(
+    to right,
+    #f6f7f8 0%,
+    #edeef1 20%,
+    #f6f7f8 40%,
+    #f6f7f8 100%
+  );
+  background-repeat: no-repeat;
+  background-size: 800px 804px;
+  display: inline-block;
+  position: relative;
+  animation-duration: 1s;
+  animation-fill-mode: forwards;
+  animation-iteration-count: infinite;
+  animation-name: placeholderShimmer;
+  animation-timing-function: linear;
+  -webkit-animation-duration: 1s;
+  -webkit-animation-fill-mode: forwards;
+  -webkit-animation-iteration-count: infinite;
+  -webkit-animation-name: placeholderShimmer;
+  -webkit-animation-timing-function: linear;
+}
+
+.shine.line {
+  display: inline-block;
+  width: 100%;
+  /* min-width: 350px; */
+  margin-bottom: 0.8rem;
+}
+
+.task .shine.line {
+  margin-bottom: 0;
+}
+
+.shine.line:last-child {
+  margin-bottom: 0;
+}
+
+.table_list_image > span {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.table_list_image {
+  background-color: #f6f7f8;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+@keyframes placeholderShimmer {
+  0% {
+    background-position: -468px 0;
+  }
+
+  100% {
+    background-position: 468px 0;
+  }
+}
+
+@-webkit-keyframes placeholderShimmer {
+  0% {
+    background-position: -468px 0;
+  }
+
+  100% {
+    background-position: 468px 0;
+  }
+}
+
+/** For Shimmer **/
+.inner-flex {
+  display: flex;
+  flex-direction: column;
+}
+
+.inner-flex.inner-flex-large {
+  gap: 4rem;
+}
+
+.inner-flex.inner-flex-medium {
+  gap: 2rem;
+}
+
+.inner-flex.inner-flex-small {
+  gap: 0.6rem;
+}
+
+.row-flex {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+}
+
+.alc {
+  align-items: center;
+}
+
+.jsc {
+  justify-content: center;
+}
+
+.jsb {
+  justify-content: space-between;
+}
+
+img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+a {
+  text-decoration: none;
+  color: #000;
+}
+
+.invalid {
+  border-color: #e3342f !important;
+  background-color: #fcebea !important;
+}
+
+.error-message {
+  color: #e3342f;
+  font-size: 12px;
+  position: absolute;
+  bottom: -25px;
+  right: 0;
+}
+
+.relative {
+  position: relative;
+}
+
+.cursor_pointer {
+  cursor: pointer;
+}
+
+.white_space_nowrap {
+  white-space: nowrap;
+}
+
+.text-center {
+  text-align: center !important;
+}
+
+.text-left {
+  text-align: left !important;
+}
+
+.text-right {
+  text-align: right !important;
+}
+
+.capitalize {
+  text-transform: capitalize;
+}
+
+.material-symbols-outlined {
+  font-family: "Material Symbols Outlined" !important;
+}
+
+.heading_text {
+  font-size: 1.1rem;
+  /* margin-bottom: 1rem; */
+  word-spacing: 0.2rem;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th,
+td {
+  padding: 10px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+/* th {
+    background-color: #f4f4f4;
+} */
+
+.toggle_on {
+  color: green;
+}
+
+.toggle_off {
+  color: red;
+}
+
+.action_button p:hover {
+  background-color: #f0f3f4;
+}
+
+.edit-color {
+  color: #13deb9;
+}
+
+.view-color {
+  color: #5d87ff;
+}
+
+.delete-color {
+  color: #fa896b;
+}
+
+.font-20 {
+  font-size: 20px;
+}
+
+.font-12 {
+  font-size: 12px;
+}
+
+.font-22 {
+  font-size: 22px;
+}
+
+.w_5 {
+  width: 5%;
+}
+
+.w_10 {
+  width: 10%;
+}
+
+.w_15 {
+  width: 15%;
+}
+
+.w_20 {
+  width: 20%;
+}
+
+.w_25 {
+  width: 25%;
+}
+
+.w_30 {
+  width: 30%;
+}
+
+.w_35 {
+  width: 35%;
+}
+
+.w_40 {
+  width: 40%;
+}
+
+.w_45 {
+  width: 45%;
+}
+
+.w_50 {
+  width: 50%;
+}
+
+.w_55 {
+  width: 55%;
+}
+
+.w_60 {
+  width: 60%;
+}
+
+.w_65 {
+  width: 65%;
+}
+
+.w_70 {
+  width: 70%;
+}
+
+.w_75 {
+  width: 75%;
+}
+
+.w_80 {
+  width: 80%;
+}
+
+.w_85 {
+  width: 85%;
+}
+
+.w_90 {
+  width: 90%;
+}
+
+.w_95 {
+  width: 95%;
+}
+
+.w_100 {
+  width: 100%;
+}
+
+.outlet_wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.content_wrapper {
+  /* box-shadow: rgba(145, 158, 171, 0.12) 0px 1px 16px; */
+  box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
+    rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
+  padding: 2rem;
+  border-radius: 12px;
+}
+
+.text-red {
+  color: rgb(153, 15, 15) !important;
+}
+
+.text-green {
+  color: rgb(6, 70, 6) !important;
+}
+.text-orange {
+  color: rgb(251 167 0) !important;
+}
+.text-blue {
+  color: rgb(10, 10, 207) !important;
+}
+
+/* add */
+/* ng-select css */
+.ng-select {
+  width: 100%;
+}
+
+.ng-select .ng-select-container .ng-value-container .ng-placeholder {
+  color: #606060;
+}
+
+.ng-select.ng-select-single .ng-select-container {
+  width: 100%;
+  padding: 12px;
+  font-size: 14px;
+  font-family: var(--semibold-font);
+  margin: 0;
+  height: auto;
+  border-radius: 12px;
+  resize: none;
+  border: 1px solid #d0dadd !important;
+  /* outline: 1px solid #D0DADD; */
+  color: #484848;
+}
+
+.ng-select .ng-select-container .ng-value-container {
+  padding-left: 0;
+}
+
+.ng-select .ng-select-container .ng-value-container .ng-input > input {
+  padding: 0;
+}
+
+.ng-select.ng-select-focused:not(.ng-select-opened) > .ng-select-container {
+  /* border-color: #007eff;
+    box-shadow: inset 0 1px 1px rgba(0,0,0,0.075),0 0 0 3px rgba(0,126,255,0.1); */
+  border-color: transparent;
+  box-shadow: none;
+}
+
+.ng-dropdown-panel.ng-select-bottom {
+  border-bottom-right-radius: 12px;
+  border-bottom-left-radius: 12px;
+  overflow: hidden;
+}
+
+.ng-select.ng-select-single .ng-select-container .ng-value-container .ng-input {
+  top: 12px;
+}
+
+.form-control {
+  display: block;
+  width: 100%;
+  padding: 12px;
+  font-size: 14px;
+  font-family: var(--semibold-font);
+  margin: 0;
+  height: auto;
+  border-radius: 12px;
+  resize: none;
+  border: 1px solid #ccc;
+  /* color: #484848; */
+  color: var(--black-color);
+  outline: none;
+}
+
+.formInput {
+  height: 100%;
+}
+
+.formInput .ng-select {
+  height: 100%;
+}
+
+.formInput .ng-select .ng-select-container {
+  height: 100%;
+}
+.relative {
+  position: relative;
+}

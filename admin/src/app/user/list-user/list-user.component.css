@@ -1,0 +1,132 @@
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+/* th {
+    background-color: #f4f4f4;
+} */
+
+.toggle_on {
+    color: green;
+}
+
+.toggle_off {
+    color: red;
+}
+
+
+
+.edit-color {
+    color: #13DEB9;
+}
+
+.view-color {
+    color: #5D87FF;
+}
+
+.delete-color {
+    color: #FA896B;
+}
+
+.gap-1rem {
+    gap: 1rem;
+}
+
+.read span,
+.delete span,
+.edit span {
+    height: 40px;
+    width: 40px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: transparent;
+    transition: var(--common-transition);
+}
+
+.edit span:hover {
+    background-color: #13DEB9;
+    color: white;
+}
+
+.read span:hover {
+    background-color: #5D87FF;
+    color: white;
+}
+
+.delete span:hover {
+    background-color: #FA896B;
+    color: white;
+}
+
+.row-flex button {
+    /* padding: 0.6rem 1rem;
+    border: none;
+    background: #5D87FF;
+    color: white;
+    border-radius: 8px;
+    transition: var(--common-transition);
+    border: 1px solid #5D87FF; */
+    width: fit-content;
+    padding: 0.75rem 1rem;
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.4s ease;
+    background: #5D87FF;
+}
+
+/* .row-flex button:hover {
+    background: white;
+    color: #5D87FF;
+    border: 1px solid #5D87FF;
+} */
+
+.PopupOverlay {
+  width: 100%;
+  height: 100%;
+  background: #00000050;
+  position: fixed;
+  z-index: 98999;
+  top: 0%;
+  left: 0%;
+  opacity: 0;
+  transition: all 0.5s ease;
+  pointer-events: none;
+}
+
+.PopupOverlay.active {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.statusPopup {
+  padding: 1.25rem;
+  border-radius: 8px;
+  background: #ffffff;
+  position: fixed;
+  z-index: 99999;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  width: 90%;
+  max-width: 500px;
+  transition: all 0.5s ease;
+  pointer-events: none;
+}
+
+.statusPopup.active {
+  transform: translate(-50%, -50%) scale(1);
+  pointer-events: all;
+}

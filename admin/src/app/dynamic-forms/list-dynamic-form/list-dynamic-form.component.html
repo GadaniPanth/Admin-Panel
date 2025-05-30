@@ -1,0 +1,187 @@
+<div class="user-wrapper outlet_wrapper">
+    <div class="row-flex jsb">
+        <h2 class="heading_text tab_name font-18 capitalize">form</h2>
+        <button class="cursor_pointer font-16" [routerLink]="'/create-form'">
+            Add Form
+        </button>
+    </div>
+    <div class="table-container content_wrapper inner-flex inner-flex-medium">
+
+        <div class="filters_container">
+            <div class="left">
+                <div class="relative" style="width: 18rem;">
+                    <input type="text" class="form-control" placeholder="Search" name="search" id="search"
+                        [(ngModel)]="formObj.search" (ngModelChange)="onSearchChange()" #search="ngModel">
+                    <!-- <div class="icon">
+                        <img src="assets/images/icons/search-line.svg" alt="">
+                    </div> -->
+                </div>
+            </div>
+            <!-- <div class="right"> -->
+
+                <!-- <div class="" style="width: 10rem;">
+                    <ng-select class="custom-ng-select" name="status" id="status" [(ngModel)]="formObj.status"
+                        #status="ngModel" (change)="onFilter();" [clearable]="false">
+                        <ng-option value=""> All </ng-option>
+                        <ng-option value="Open"> Open </ng-option>
+                        <ng-option value="Closed"> Closed </ng-option>
+                    </ng-select>
+                </div>
+                <div style="width: 16rem;">
+                    <div class="formInput relative">
+                        <ng-select placeholder="Select type" [searchable]="true" [(ngModel)]="formObj.form_id"
+                            id="type" name="type" (change)="onFilter();">
+                            <ng-option value="{{item.id}}" *ngFor="let item of form_type_list">
+                                {{item.type}}
+                            </ng-option>
+                        </ng-select>
+                    </div>
+                </div>
+                <div style="width: 16rem;">
+                    <div class="formInput relative">
+                        <ng-select placeholder="Select type" [searchable]="true" [(ngModel)]="formObj.status_id"
+                            id="type" name="type" (change)="onFilter();">
+                            <ng-option value="{{item.id}}" *ngFor="let item of form_status_list">
+                                {{item.type}}
+                            </ng-option>
+                        </ng-select>
+                    </div>
+                </div>
+
+            </div> -->
+
+
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th class="w_10">#</th>
+                    <th class="w_40">Name</th>
+                    <!-- <th class="w_15">Email</th>
+                    <th class="w_15">Contact No</th>
+                    <th class="w_15">Message</th>
+                    <th class="w_15">Type</th> -->
+                    <!-- <th>Active</th> -->
+                    <!-- <th class="w_10 ">Status</th> -->
+                    <th class="w_30">Date</th>
+                    <th class="w_20 text-center">Actions</th>
+                </tr>
+            </thead>
+            <tbody *ngIf="form_List && form_List.length > 0 && !isLoading">
+                <tr *ngFor="let data of form_List; let i = index">
+                    <td class="w_5">{{ i + 1 }}</td>
+                    <td class="capitalize w_10">{{ data.form_title }}</td>
+                    <!-- <td class="capitalize w_20"
+                        [ngClass]="{'text-green': data.status == 'Open','text-red': data.status == 'Closed'}">{{
+                        data.status }}</td> -->
+                    <td class="capitalize">{{ data.created_at_formated }}</td>
+                    <!-- <td>
+                        <div class="">
+                            <span class="material-symbols-outlined"
+                                title="{{ isToggled ? 'Mark As Inactive' : 'Mark As Active' }}" (click)="toggle()"
+                                [ngClass]="isToggled ? 'toggle_on' : 'toggle_off'"
+                                style="cursor: pointer; font-size: 32px">
+                                {{ isToggled ? "toggle_on" : "toggle_off" }}
+                            </span>
+                        </div>
+                    </td> -->
+                    <td>
+                        <div class="row-flex alc gap-1rem jsc">
+                            <div class="edit edit-color cursor_pointer" (click)="onEdit(data.id)" >
+                                <span class="material-symbols-outlined font-22">
+                                    edit
+                                </span>
+                            </div>
+                            <!-- <div class="PopupOverlay" [class.active]="deleteObj.form_id != ''" (click)="deleteObj.form_id =''"></div>
+                            <div class="statusPopup" [class.active]="deleteObj.form_id != ''">
+
+                                <div class="inner-flex inner-flex-medium">
+
+                                    <div>
+                                        <h3 style="text-align: center;">
+                                            Are you sure to delete Form: <span class="capitalize">{{data.form_title}}</span> ?
+                                        </h3>
+                                    </div>
+                                    <div class="row-flex aic jsc">
+                                        <button type="submit" class="formButton" (click)="confirmDelete()">
+                                            {{isDelete ? "Please Wait..." : "Yes" }}
+                                        </button>
+                                        <button (click)="cancelCahnge()" type="button" class="formButton redBtn">
+                                            No
+                                        </button>
+                                    </div>
+                                </div>
+
+                            </div> -->
+                            <div class="read view-color cursor_pointer" (click)="deletepopup(data.id)">
+                                <span class="material-symbols-outlined font-22">
+                                    delete
+                                </span>
+                            </div>
+                            <!-- <div class="delete delete-color cursor_pointer">
+                                <span class="material-symbols-outlined font-22"> delete </span>
+                            </div> -->
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+
+            <tbody *ngIf="isLoading" class="w-100">
+                <tr *ngFor="let record of [].constructor(5)" class="w-100">
+                    <td>
+                        <p class="bold shine line">&nbsp; </p>
+                    </td>
+                    <td>
+                        <p class="bold shine line">&nbsp; </p>
+                    </td>
+                    <td>
+                        <p class="bold shine line">&nbsp; </p>
+                    </td>
+                    <td>
+                        <p class="bold shine line">&nbsp; </p>
+                    </td>
+                    <td>
+                        <p class="bold shine line">&nbsp; </p>
+                    </td>
+                    <td>
+                        <p class="bold shine line">&nbsp; </p>
+                    </td>
+                    <td>
+                        <p class="bold shine line">&nbsp; </p>
+                    </td>
+                    <td>
+                        <p class="bold shine line">&nbsp; </p>
+                    </td>
+                </tr>
+            </tbody>
+            <tbody *ngIf="!isLoading && form_List && form_List.length == 0">
+                <tr>
+                    <td colspan="9" class="text-center">Whoops...! No Data Found...</td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="PopupOverlay" [class.active]="deleteObj.form_id != ''" (click)="deleteObj.form_id =''"></div>
+        <div class="statusPopup" [class.active]="deleteObj.form_id != ''">
+            <div class="inner-flex inner-flex-medium">
+                <div>
+                    <h3 style="text-align: center;">
+                        Are you sure to delete Form ?
+                    </h3>
+                </div>
+                <div class="row-flex aic jsc">
+                    <button type="submit" class="formButton" (click)="confirmDelete()">
+                        {{isDelete ? "Please Wait..." : "Yes" }}
+                    </button>
+                    <button (click)="cancelCahnge()" type="button" class="formButton redBtn">
+                        No
+                    </button>
+                </div>
+            </div>
+
+        </div>
+        <!-- <button (click)="prevPage()" [disabled]="formObj.page === 1">Previous</button>
+        <span>Page {{formObj.page}}</span>
+        <button (click)="nextPage()" [disabled]="formObj.page * formObj.limit >= formObj.total">Next</button> -->
+    </div>
+</div>

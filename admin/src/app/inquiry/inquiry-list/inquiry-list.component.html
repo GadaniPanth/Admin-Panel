@@ -1,0 +1,401 @@
+<div class="user-wrapper outlet_wrapper">
+    <div class="row-flex jsb">
+        <h2 class="heading_text tab_name font-18">Inquiry</h2>
+        <!-- <button class="cursor_pointer font-16" [routerLink]="'/register'">
+            Add User
+        </button> -->
+    </div>
+    <div class="table-container content_wrapper inner-flex inner-flex-medium">
+
+        <div class="filters_container">
+            <div class="left">
+                <div class="relative" style="width: 18rem;">
+                    <input type="text" class="form-control" placeholder="Search" name="search" id="search"
+                        [(ngModel)]="inquiryObj.search" (ngModelChange)="onSearchChange()" #search="ngModel">
+                    <!-- <div class="icon">
+                        <img src="assets/images/icons/search-line.svg" alt="">
+                    </div> -->
+                </div>
+            </div>
+            <div class="right">
+
+                <!-- <div class="" style="width: 10rem;">
+                    <ng-select class="custom-ng-select" name="status" id="status" [(ngModel)]="inquiryObj.status"
+                        #status="ngModel" (change)="onFilter();" [clearable]="false">
+                        <ng-option value=""> All </ng-option>
+                        <ng-option value="Open"> Open </ng-option>
+                        <ng-option value="Closed"> Closed </ng-option>
+                    </ng-select>
+                </div> -->
+                <div style="width: 16rem;">
+                    <div class="formInput relative">
+                        <ng-select placeholder="Select type" [searchable]="true" [(ngModel)]="inquiryObj.form_id"
+                            id="type" name="type" (change)="onFilter();">
+                            <ng-option value="{{item.id}}" *ngFor="let item of inquiry_type_list">
+                                {{item.type}}
+                            </ng-option>
+                        </ng-select>
+                    </div>
+                </div>
+                <div style="width: 16rem;">
+                    <div class="formInput relative">
+                        <ng-select [searchable]="true" [(ngModel)]="inquiryObj.status_id" id="status" name="status"
+                            (change)="onFilter();" [clearable]="false" class="capitalize">
+                            <ng-option value=""> All </ng-option>
+                            <ng-option value="{{item.id}}" *ngFor="let item of inquiry_status_list">
+                                {{item.status}}
+                            </ng-option>
+                        </ng-select>
+                    </div>
+                </div>
+
+            </div>
+
+
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th class="w_5">#</th>
+                    <th class="w_10">Name</th>
+                    <th class="w_15">Email</th>
+                    <th class="w_15">Contact No</th>
+                    <th class="w_15">Message</th>
+                    <th class="w_15">Type</th>
+                    <!-- <th>Active</th> -->
+                    <th class="w_10 ">Status</th>
+                    <th class="w_20">Date</th>
+                    <th class="text-center w_20">Actions</th>
+                </tr>
+            </thead>
+            <tbody *ngIf="inquiry_List && inquiry_List.length > 0 && !isLoading">
+                <tr *ngFor="let data of inquiry_List; let i = index">
+                    <td>{{ i + 1 }}</td>
+                    <td>{{ data.name }}</td>
+                    <td>{{ data.email }}</td>
+                    <td>{{ data.contact_no }}</td>
+                    <td class="capitalize">{{ data.message }}</td>
+                    <td class="capitalize">{{ data.form_name }}</td>
+                    <td class="capitalize"
+                        [ngClass]="{'text-green': data.status_id == 4,'text-red': data.status_id == 3,'text-orange': data.status_id == 1,'text-blue': data.status_id == 2}">
+                        {{
+                        data.status }}</td>
+                    <td class="capitalize">{{ data.created_at_formated }}</td>
+                    <!-- <td>
+                        <div class="">
+                            <span class="material-symbols-outlined"
+                                title="{{ isToggled ? 'Mark As Inactive' : 'Mark As Active' }}" (click)="toggle()"
+                                [ngClass]="isToggled ? 'toggle_on' : 'toggle_off'"
+                                style="cursor: pointer; font-size: 32px">
+                                {{ isToggled ? "toggle_on" : "toggle_off" }}
+                            </span>
+                        </div>
+                    </td> -->
+                    <td>
+                        <div class="row-flex alc gap-1rem jsc">
+                            <div class="edit edit-color cursor_pointer" title="Update Status"
+                                (click)="change_Status(data)">
+                                <span class="material-symbols-outlined">
+                                    free_cancellation
+                                </span>
+                            </div>
+                            <div class="read view-color cursor_pointer" (click)="toggleDetail(data)" title="View">
+                                <span class="material-symbols-outlined font-22">
+                                    visibility
+                                </span>
+                            </div>
+                            <div class="delete delete-color cursor_pointer" title="History"
+                                (click)="inquiryHistoryList(data.id)">
+                                <span class="material-symbols-outlined font-22"> history </span>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+
+            <tbody *ngIf="isLoading" class="w-100">
+                <tr *ngFor="let record of [].constructor(5)" class="w-100">
+                    <td>
+                        <p class="bold shine line">&nbsp; </p>
+                    </td>
+                    <td>
+                        <p class="bold shine line">&nbsp; </p>
+                    </td>
+                    <td>
+                        <p class="bold shine line">&nbsp; </p>
+                    </td>
+                    <td>
+                        <p class="bold shine line">&nbsp; </p>
+                    </td>
+                    <td>
+                        <p class="bold shine line">&nbsp; </p>
+                    </td>
+                    <td>
+                        <p class="bold shine line">&nbsp; </p>
+                    </td>
+                    <td>
+                        <p class="bold shine line">&nbsp; </p>
+                    </td>
+                    <td>
+                        <p class="bold shine line">&nbsp; </p>
+                    </td>
+                </tr>
+            </tbody>
+            <tbody *ngIf="!isLoading && inquiry_List && inquiry_List.length == 0">
+                <tr>
+                    <td colspan="9" class="text-center">Whoops...! No Data Found...</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+
+<div class="overlay" [class.active]="isOverlayOpen" (click)="closeDetail()">
+    <div class="slide-panel inner-flex inner-flex-medium" (click)="$event.stopPropagation()">
+        <!-- <button class="close-btn" (click)="toggleVariation()">Close</button> -->
+        <div class="jsb display-flex">
+            <h2>Inquiry Details</h2>
+            <!-- <div class="icons cancel-icn cursor_pointer" (click)="closeDetail()">
+                <span class="material-symbols-outlined">
+                    close
+                </span>
+            </div> -->
+        </div>
+        <div class=" detail-wrapper">
+            <div class="display-flex single-data">
+                <div style="min-width: 35%;">
+                    <h4>Name :</h4>
+                </div>
+                <div>
+                    <p class="capitalize">{{inquiryDetailObj.name ? inquiryDetailObj.name :'-'}}</p>
+                </div>
+            </div>
+            <!-- <div class="display-flex single-data">
+                <div style="min-width: 35%;">
+                    <h4>Company Name :</h4>
+                </div>
+                <div>
+                    <p class="capitalize">{{inquiryDetailObj.company_name ? inquiryDetailObj.company_name :'-'}}</p>
+                </div>
+            </div> -->
+            <!-- <div class="display-flex single-data" *ngIf="inquiryDetailObj.type == 'product'">
+                <div style="min-width: 35%;">
+                    <h4>Product Name :</h4>
+                </div>
+                <div>
+                    <p class="capitalize">{{inquiryDetailObj.product_name ? inquiryDetailObj.product_name :'-'}}</p>
+                </div>
+            </div> -->
+            <div class="display-flex single-data">
+                <div style="min-width: 35%;">
+                    <h4>Contact No :</h4>
+                </div>
+                <div>
+                    <p class="capitalize" *ngIf="inquiryDetailObj.contact_no"><a
+                            href="tel:{{inquiryDetailObj.contact_no}}">{{inquiryDetailObj.contact_no}}</a></p>
+                    <p class="capitalize" *ngIf="!inquiryDetailObj.contact_no">-</p>
+                </div>
+            </div>
+            <div class="display-flex single-data">
+                <div style="min-width: 35%;">
+                    <h4>Email :</h4>
+                </div>
+                <div>
+                    <p class="cursor_pointer" *ngIf="inquiryDetailObj.email"><a
+                            href="mailto:{{inquiryDetailObj.email}}">{{inquiryDetailObj.email}}</a>
+                    </p>
+                    <p class="capitalize" *ngIf="!inquiryDetailObj.email">-
+                    </p>
+                </div>
+            </div>
+            <div class="display-flex single-data">
+                <div style="min-width: 35%;">
+                    <h4>Inquiry Type :</h4>
+                </div>
+                <div>
+                    <p class="capitalize">{{inquiryDetailObj.form_name ? inquiryDetailObj.form_name : '-'}}</p>
+                </div>
+            </div>
+            <div class="display-flex single-data">
+                <div style="min-width: 35%;">
+                    <h4>Message :</h4>
+                </div>
+                <div>
+                    <p class="capitalize">{{inquiryDetailObj.message ? inquiryDetailObj.message : '-'}}</p>
+                </div>
+            </div>
+            <!-- <div class="display-flex single-data" *ngIf="inquiryDetailObj.type == 'career'">
+                <div style="min-width: 35%;">
+                    <h4>Interested For :</h4>
+                </div>
+                <div>
+                    <p class="capitalize">{{inquiryDetailObj.interested_for ? inquiryDetailObj.interested_for : '-'}}
+                    </p>
+                </div>
+            </div> -->
+            <!-- <div class="display-flex single-data" *ngIf="inquiryDetailObj.type == 'career'">
+                <div style="min-width: 35%;">
+                    <h4>Prefered Location :</h4>
+                </div>
+                <div>
+                    <p class="capitalize">{{inquiryDetailObj.prefered_location ? inquiryDetailObj.prefered_location :
+                        '-'}}</p>
+                </div>
+            </div> -->
+            <!-- <div class="display-flex single-data" *ngIf="inquiryDetailObj.type == 'career'">
+                <div style="min-width: 35%;">
+                    <h4>Resume :</h4>
+                </div>
+                <div>
+                    <p class="capitalize" *ngIf="inquiryDetailObj.resume"><a href="{{inquiryDetailObj.resume}}"
+                            target="_blank" style="color: rgb(15, 15, 114);">View Resume</a></p>
+                    <p class="capitalize" *ngIf="!inquiryDetailObj.resume"><a href="{{inquiryDetailObj.resume}}"
+                            target="_blank">-</a></p>
+                </div>
+            </div> -->
+            <div class="display-flex single-data">
+                <div style="min-width: 35%;">
+                    <h4>Remarks :</h4>
+                </div>
+                <div>
+                    <p class="capitalize">{{inquiryDetailObj.remarks ? inquiryDetailObj.remarks : '-'}} </p>
+                </div>
+            </div>
+            <div class="display-flex single-data">
+                <div style="min-width: 35%;">
+                    <h4>Status :</h4>
+                </div>
+                <div>
+                    <p class="capitalize"
+                        [ngClass]="{'text-green': inquiryDetailObj.status_id == 4,'text-red': inquiryDetailObj.status_id == 3,'text-orange': inquiryDetailObj.status_id == 1,'text-blue': inquiryDetailObj.status_id == 2}">
+                        {{inquiryDetailObj.status}} </p>
+                </div>
+            </div>
+            <div class="display-flex single-data">
+                <div style="min-width: 35%;">
+                    <h4>Inquiry Date :</h4>
+                </div>
+                <div>
+                    <p class="capitalize">{{inquiryDetailObj.created_at_formated}}</p>
+                </div>
+            </div>
+            <div class="display-flex single-data" *ngIf="inquiryDetailObj.closed_at">
+                <div style="min-width: 35%;">
+                    <h4>Closed Date :</h4>
+                </div>
+                <div>
+                    <p class="capitalize">{{inquiryDetailObj.closed_at}}</p>
+                </div>
+            </div>
+
+        </div>
+
+
+    </div>
+</div>
+
+
+<!--  followup -->
+<div class="PopupOverlay" [class.active]="statusOpenF || historytoggleF"
+    (click)="cancelCahnge();historytoggleF = false"></div>
+<div class="statusPopup" [class.active]="statusOpenF">
+    <form name="statusForm" id="statusForm" (ngSubmit)="confirmChangeStatus(statusForm.form)" #statusForm="ngForm"
+        novalidate class="inner-flex inner-flex-medium">
+        <div>
+            <h3>Update Status</h3>
+        </div>
+        <div class="inner-flex inner-flex-small">
+            <label for="remaks" class="form-title-label semibold-fonts">
+                Status
+                <span class="star">*</span>
+            </label>
+            <div class="formInput relative">
+                <ng-select [searchable]="true" [(ngModel)]="statusObj.status_id" id="status" name="status"
+                    [clearable]="false" class="capitalize">
+                    <!-- <ng-option value=""> All </ng-option> -->
+                    <ng-option value="{{item.id}}" *ngFor="let item of inquiry_status_list">
+                        {{item.status}}
+                    </ng-option>
+                </ng-select>
+            </div>
+        </div>
+
+        <div class="relative inner-flex inner-flex-small">
+            <label for="remaks" class="form-title-label semibold-fonts">
+                Remarks
+                <!-- <span class="star">*</span> -->
+            </label>
+            <div class="formInput relative">
+                <input class="form-control" type="text" [(ngModel)]="statusObj.remarks" #remarks="ngModel" id="remarks"
+                    name="remarks">
+            </div>
+            <!-- [ngClass]="{'invalid': statusForm.submitted && statusObj.remarks == '' }" -->
+        </div>
+        <div class="row-flex aic">
+            <button type="submit" class="">
+                {{isStatusChange ? "Please Wait..." : "Change Status" }}
+            </button>
+            <button (click)="cancelCahnge()" type="button" class="formButton redBtn">
+                Cancel
+            </button>
+        </div>
+    </form>
+</div>
+
+<!-- History -->
+
+<div class="history-data overlay-data  inner-flex inner-flex-medium" [class.menu-active]="historytoggleF"
+    *ngIf="historytoggleF">
+    <div class="jsb history-title">
+        <h2>Inquiry History </h2>
+        <i class="ri-close-large-line close-icn" (click)="toggleOverlay()"></i>
+    </div>
+
+    <div class="timeline-container" *ngIf="!isLoadingHistory">
+
+        <div *ngIf="inquiryHistory_list.length > 0">
+            <div class="timeline">
+                <div class="timeline-item" *ngFor="let data of inquiryHistory_list">
+                    <div class="timeline-icon"></div>
+                    <div class="timeline-content">
+                        <p style="font-weight: 800;">{{ formatUpdatedAt(data.updated_at) === todayDate ? 'Today' :
+                            data.updated_at }} - {{data.update_time}}
+
+                        </p>
+                        <h3 class="capitalize">{{ data.status }} </h3>
+                        <p *ngIf="data.remarks" class="capitalize">Remark : {{ data.remarks }}</p>
+                        <p class="capitalize">Status Changed by {{data.performed_by == user_id ? 'you' :
+                            data.performed_by_name}}. </p>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center no-history" *ngIf="inquiryHistory_list.length == 0">
+            <h4>No History Found !!</h4>
+        </div>
+
+    </div>
+
+
+
+    <div class="inner-flex inner-flex-small history-wrapper" *ngIf="isLoadingHistory">
+
+        <div class="task-history inner-flex inner-flex-smallest" *ngFor="let record of dummyRecordsHistory">
+            <p class="bold shine line ">&nbsp;</p>
+            <p class="bold shine line">&nbsp;</p>
+            <p class="bold shine line">&nbsp;</p>
+            <!-- <p class="bold shine line">&nbsp;</p> -->
+        </div>
+        <div class="text-center" *ngIf="inquiryHistory_list.length == 0 && !isLoadingHistory">
+            <h4>!! No History Found !!</h4>
+        </div>
+    </div>
+
+
+
+</div>

@@ -1,0 +1,102 @@
+<div class="user-wrapper outlet_wrapper">
+  <div class="row-flex jsb">
+    <h2 class="heading_text tab_name font-18">Users</h2>
+    <button class="cursor_pointer font-16" [routerLink]="'/register'">
+      Add User
+    </button>
+  </div>
+  <div class="table-container content_wrapper">
+
+    <table>
+      <thead>
+        <tr>
+          <th class="w_5">#</th>
+          <th class="w_15">Name</th>
+          <th class="w_20">Email</th>
+          <th class="w_15">Contact no</th>
+          <th class="w_20">Designation</th>
+          <th class="w_5">Role</th>
+          <!-- <th>Active</th> -->
+          <!-- <th class="w_10 text-center">Status</th> -->
+          <th class="text-center w_20">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let user of usersList; let i = index">
+          <td>{{ i + 1 }}</td>
+          <td class="capitalize">{{ user.name }}</td>
+          <td>{{ user.email }}</td>
+          <td>{{ user.contact_no }}</td>
+          <td class="capitalize">{{ user.designation }}</td>
+          <td class="capitalize">{{ user.user_type }}</td>
+          <!-- <td class="text-center">
+                        <div class="">
+                            <span class="material-symbols-outlined"
+                                title="{{ user.is_active == 1 ? 'Mark As active' : 'Mark As Inactive' }}"
+                                (click)="toggle(user.user_id , user.is_active)"
+                                [ngClass]="user.is_active == 1 ? 'toggle_on' : 'toggle_off'"
+                                style="cursor: pointer; font-size: 32px">
+                                {{ user.is_active == 1 ? "toggle_on" : "toggle_off" }}
+                            </span>
+                        </div>
+                    </td> -->
+          <td>
+            <div class="row-flex alc gap-1rem jsc">
+              <div
+                class="edit edit-color cursor_pointer"
+                [routerLink]="['/edit-user', user.user_id]"
+              >
+                <!-- (click)="onEdit(user.user_id)" -->
+                <span class="material-symbols-outlined font-22">
+                  edit_square
+                </span>
+              </div>
+              <!-- <div class="read view-color cursor_pointer">
+                                <span class="material-symbols-outlined font-22">
+                                    visibility
+                                </span>
+                            </div> -->
+              <div
+                class="delete delete-color cursor_pointer"
+                (click)="deletepopup(user.user_id)"
+              >
+                <span class="material-symbols-outlined font-22"> delete </span>
+              </div>
+            </div>
+          </td>
+        </tr>
+        <div
+          class="PopupOverlay"
+          [class.active]="deleteObj.user_id != ''"
+          (click)="deleteObj.user_id = ''"
+        ></div>
+        <div class="statusPopup" [class.active]="deleteObj.user_id != ''">
+          <div class="inner-flex inner-flex-medium">
+            <div>
+              <h3 style="text-align: center">
+                Are you sure to delete User?
+                <!-- Are you sure to delete user: <span class="capitalize">{{usersList[deleteObj.user_id].name}}</span> ? -->
+              </h3>
+            </div>
+            <div class="row-flex aic jsc">
+              <button
+                type="submit"
+                class="formButton"
+                (click)="confirmDelete()"
+              >
+                {{ isDelete ? "Please Wait..." : "Yes" }}
+              </button>
+              <button
+                (click)="cancelCahnge()"
+                type="button"
+                class="formButton redBtn"
+              >
+                No
+              </button>
+            </div>
+          </div>
+        </div>
+      </tbody>
+    </table>
+  </div>
+</div>

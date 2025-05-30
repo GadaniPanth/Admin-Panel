@@ -1,0 +1,88 @@
+<div class="login-container">
+  <h2>Admin Login</h2>
+  <form #loginForm="ngForm" (ngSubmit)="login(loginForm)" novalidate>
+    <!-- Email -->
+    <div class="">
+      <label for="email">Email</label>
+      <input
+        id="email"
+        name="email"
+        type="email"
+        [(ngModel)]="loginData.email"
+        #emailInput="ngModel"
+        required
+        minlength="3"
+        pattern="^[a-zA-Z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
+        (input)="onInputChange()"
+        [class.invalid]="
+          emailInput.invalid && (emailInput.dirty || emailInput.touched)
+        "
+      />
+      <div
+        class="error"
+        *ngIf="emailInput.invalid && (emailInput.dirty || emailInput.touched)"
+      >
+        <span *ngIf="emailInput.errors?.required" class="font-13"
+          >Email is required.</span
+        >
+        <span *ngIf="emailInput.errors?.pattern" class="font-13"
+          >Enter a valid email address.</span
+        >
+      </div>
+    </div>
+    <!-- Password -->
+    <div class="password-wrapper">
+      <label for="password">Password</label>
+      <div class="password-field">
+        <input
+          id="password"
+          name="password"
+          [type]="passwordVisible ? 'text' : 'password'"
+          [(ngModel)]="loginData.password"
+          #passwordInput="ngModel"
+          required
+          minlength="3"
+          (input)="onInputChange()"
+          [class.invalid]="
+            passwordInput.invalid &&
+            (passwordInput.dirty || passwordInput.touched)
+          "
+        />
+
+        <i
+          class="fa"
+          [ngClass]="passwordVisible ? 'fa-eye-slash' : 'fa-eye'"
+          (click)="togglePasswordVisibility()"
+          style="cursor: pointer; margin-left: -30px"
+        ></i>
+      </div>
+
+      <div
+        class="error"
+        *ngIf="
+          passwordInput.invalid &&
+          (passwordInput.dirty || passwordInput.touched)
+        "
+      >
+        <span *ngIf="passwordInput.errors?.required" class="font-13"
+          >Password is required.</span
+        >
+        <span *ngIf="passwordInput.errors?.minlength" class="font-13"
+          >Minimum 3 characters required.</span
+        >
+      </div>
+    </div>
+
+    <div class="">
+      <a routerLink="/forgot-password">Forgot Password ?</a>
+    </div>
+    <!-- Submit -->
+    <!-- <button type="submit">Login</button> -->
+    <button type="submit" [disabled]="loginForm.invalid || isLoading">
+      {{ isLoading ? "Logging in..." : "Login" }}
+    </button>
+
+    <!-- Server or Login error -->
+    <p class="error" *ngIf="errorMessage">{{ errorMessage }}</p>
+  </form>
+</div>

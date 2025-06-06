@@ -11,15 +11,24 @@ import { ListUserComponent } from "./user/list-user/list-user.component";
 import { InquiryListComponent } from "./inquiry/inquiry-list/inquiry-list.component";
 import { AddUserComponent } from "./user/add-user/add-user.component";
 import { ListDynamicFormComponent } from "./dynamic-forms/list-dynamic-form/list-dynamic-form.component";
+import { AddDynamicFormComponent } from "./dynamic-forms/add-dynamic-form/add-dynamic-form.component";
+import { ChangePasswordComponent } from "./change-password/change-password.component";
+import { MyProfileComponent } from "./my-profile/my-profile.component";
 
 const routes: Routes = [
   // { path: "", redirectTo: "/login", pathMatch: "full" },
   { path: "login", component: LoginComponent },
   {
-    path: "forgot-password",
+    // path: "forgot-password",
+    path: "reset-password",
     component: ForgotPasswordComponent,
-    data: { title: "Forgot Password", tabName: "Forgot Password" },
+    data: { title: "Reset Password", tabName: "Reset Password" },
   },
+  // {
+  //   path: "change-password",
+  //   component: ChangePasswordComponent,
+  //   data: { title: "Change Password", tabName: "Change Password" },
+  // },
   // {
   //   path: "register",
   //   component: RegisterUserComponent,
@@ -36,29 +45,34 @@ const routes: Routes = [
         pathMatch: "full",
       },
       {
+        path: "change-password",
+        component: ChangePasswordComponent,
+        data: { title: "Change Password", tabName: "users" },
+       },
+      {
         path: "dashboard",
         component: DashboardComponent,
         data: { title: "Dashboard", tabName: "dashboard" },
       },
       {
         path: "register",
-        component: RegisterUserComponent,
-        data: { title: "Register User", tabName: "Register User" },
+        component: AddUserComponent,
+        data: { title: "Register User", tabName: "users" },
       },
       {
         path: "list-form",
         component: ListDynamicFormComponent,
-        data: { title: "List Form", tabName: "List Form" },
+        data: { title: "Forms", tabName: "List Form" },
       },
       {
         path: "create-form",
-        component: AddFormsComponent,
-        data: { title: "Create Form", tabName: "Create Form" },
+        component: AddDynamicFormComponent,
+        data: { title: "Add Form", tabName: "List Form" },
       },
       {
         path: "edit-form/:id",
-        component: AddFormsComponent,
-        data: { title: "Edit Form", tabName: "Edit Form" },
+        component: AddDynamicFormComponent,
+        data: { title: "Edit Form", tabName: "List Form" },
       },
       {
         path: "users",
@@ -73,7 +87,12 @@ const routes: Routes = [
       {
         path: "edit-user/:id",
         component: AddUserComponent,
-        data: { title: "Edit User", tabName: "Edit User" },
+        data: { title: "Edit User", tabName: "users" },
+      },
+      {
+        path: "profile",
+        component: MyProfileComponent,
+        data: { title: "My Profile", tabName: "users" },
       },
 
       // For exmaple

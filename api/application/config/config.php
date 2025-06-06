@@ -1,5 +1,5 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 date_default_timezone_set('Asia/Kolkata'); // GMT+05:30
 
 /*
@@ -27,10 +27,10 @@ date_default_timezone_set('Asia/Kolkata'); // GMT+05:30
 // $config['base_url'] = '';
 
 $config['base_url'] = 'http://192.168.1.199/generatic-admin/api/';
-defined('FC_PATH') OR define('FC_PATH', substr(FCPATH, 0, -1)."/uploads/");
-defined('IMAGETOOL')      OR define('IMAGETOOL', 'http://192.168.1.199/generatic-admin/api/image-tool/index.php?src=');
-defined('BASE_URL')      OR define('BASE_URL', 'http://192.168.1.199/generatic-admin/api/');
-defined('FRONT_URL')      OR define('FRONT_URL', 'http://192.168.1.199/generatic-admin/admin/');
+defined('FC_PATH') or define('FC_PATH', substr(FCPATH, 0, -1) . "/uploads/");
+defined('IMAGETOOL') or define('IMAGETOOL', 'http://192.168.1.199/generatic-admin/api/image-tool/index.php?src=');
+defined('BASE_URL') or define('BASE_URL', 'http://192.168.1.199/generatic-admin/api/');
+defined('FRONT_URL') or define('FRONT_URL', 'http://192.168.1.199/generatic-admin/admin/');
 
 
 /*
@@ -61,7 +61,7 @@ $config['index_page'] = '';
 |
 | WARNING: If you set this to 'PATH_INFO', URIs will always be URL-decoded!
 */
-$config['uri_protocol']	= 'REQUEST_URI';
+$config['uri_protocol'] = 'REQUEST_URI';
 
 /*
 |--------------------------------------------------------------------------
@@ -85,7 +85,7 @@ $config['url_suffix'] = '';
 | than english.
 |
 */
-$config['language']	= 'english';
+$config['language'] = 'english';
 
 /*
 |--------------------------------------------------------------------------
@@ -333,7 +333,9 @@ $config['cache_query_string'] = FALSE;
 | https://codeigniter.com/user_guide/libraries/encryption.html
 |
 */
-$config['encryption_key'] = '';
+// $config['encryption_key'] = '';
+$config['encryption_key'] = '9Cw@uXbL!3V$khd821F#zQplRwKlTgoP';
+
 
 /*
 |--------------------------------------------------------------------------
@@ -409,11 +411,11 @@ $config['sess_regenerate_destroy'] = FALSE;
 |       'cookie_httponly') will also affect sessions.
 |
 */
-$config['cookie_prefix']	= '';
-$config['cookie_domain']	= '';
-$config['cookie_path']		= '/';
-$config['cookie_secure']	= FALSE;
-$config['cookie_httponly'] 	= FALSE;
+$config['cookie_prefix'] = '';
+$config['cookie_domain'] = '';
+$config['cookie_path'] = '/';
+$config['cookie_secure'] = FALSE;
+$config['cookie_httponly'] = FALSE;
 
 /*
 |--------------------------------------------------------------------------

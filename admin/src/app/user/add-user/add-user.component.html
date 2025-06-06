@@ -1,189 +1,201 @@
-<div class="register-container outlet_wrapper">
-  <h2 class="heading_text tab_name font-18">Edit User </h2>
-  <!-- <h2>User Register</h2> -->
-   <div class="content_wrapper">
-    <form class="register-form" #EditForm="ngForm" (ngSubmit)="onSubmit(EditForm)" novalidate>
-    <!-- Username -->
-    <div class="input-field">
-      <label for="name" [ngClass]="{'error-label': nameInput.invalid && (nameInput.dirty || nameInput.touched)}" >Name<sup>*</sup></label>
-      <input
-      id="name"
-      name="name"
-      type="text"
-      [(ngModel)]="EditData.name"
-      #nameInput="ngModel"
-      required
-      minlength="3"
-      placeholder="Enter Name"
-        (input)="onInputChange()"
-        [class.invalid]="
+<div class="inner-flex inner-flex-medium">
+    <div class="register-container outlet_wrapper">
+        <div class="row-flex jsb page-header relative">
+            <div class="page-header-text">
+                <h2 class="heading_text tab_name font-18">{{formHead}} </h2>
+                <ul class="breadcrumb">
+                    <div class="breadcrumb row-flex" style="align-items: center;"><a
+                            routerLink="/dashboard">Dashboard</a>
+                        <img style="width: 8px; height: 8px; margin: 0 .8rem;" src="assets/images/circle-fill.svg" /> <a
+                            routerLink="/users"> Users </a> <img style="width: 8px; height: 8px; margin: 0 .8rem;"
+                            src="assets/images/circle-fill.svg" /> {{formHead}}
+                    </div>
+                </ul>
+            </div>
+            <img class="header-image" src="assets/images/Chat.png" alt="">
+        </div>
+        <!-- <h2>User Register</h2> -->
+        <div class="content_wrapper">
+            <form class="register-form" #UserForm="ngForm" (ngSubmit)="onSubmit(UserForm)" novalidate>
+                <!-- Username -->
+                <div class="input-field">
+                    <label for="name"
+                        [ngClass]="{'error-label': nameInput.invalid && (nameInput.dirty || nameInput.touched)}">Name<sup>*</sup></label>
+                    <input id="name" name="name" type="text" [(ngModel)]="UserData.name" #nameInput="ngModel" required
+                        minlength="3" placeholder="Enter Name" (input)="onInputChange()" [class.invalid]="
           nameInput.invalid && (nameInput.dirty || nameInput.touched)
-          "
-      />
-      <!-- <label for="name" [ngClass]="{'error-label': nameInput.invalid && (nameInput.dirty || nameInput.touched)}" >Name<sup>*</sup></label> -->
-      <div class="error"*ngIf="nameInput.invalid && (nameInput.dirty || nameInput.touched)">
-        <span *ngIf="nameInput.errors?.required" class="font-13">Name is required.</span>
-        <span *ngIf="nameInput.errors?.minlength" class="font-13">Minimum length is 3</span>
-      </div>
-    </div>
-    <!-- Email -->
-    <div class="input-field">
-      <label for="email" [ngClass]="{'error-label': emailInput.invalid && (emailInput.dirty || emailInput.touched)}" >Email<sup>*</sup></label>
-      <input
-      id="email"
-      name="email"
-      type="email"
-      [(ngModel)]="EditData.email"
-      #emailInput="ngModel"
-      required
-      minlength="3"
-      pattern="^[a-zA-Z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
-      (input)="onInputChange()"
-      placeholder="Enter Email"
-      [class.invalid]="
+          " />
+                    <!-- <label for="name" [ngClass]="{'error-label': nameInput.invalid && (nameInput.dirty || nameInput.touched)}" >Name<sup>*</sup></label> -->
+                    <div class="error" *ngIf="nameInput.invalid && (nameInput.dirty || nameInput.touched)">
+                        <span *ngIf="nameInput.errors?.required" class="font-13">Name is required.</span>
+                        <span *ngIf="nameInput.errors?.minlength" class="font-13">Minimum length is 3</span>
+                    </div>
+                </div>
+                <!-- Email -->
+                <div class="input-field">
+                    <label for="email"
+                        [ngClass]="{'error-label': emailInput.invalid && (emailInput.dirty || emailInput.touched)}">Email<sup>*</sup></label>
+                    <input id="email" name="email" type="email" [(ngModel)]="UserData.email" #emailInput="ngModel"
+                        required minlength="3" pattern="^[a-zA-Z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
+                        (input)="onInputChange()" placeholder="Enter Email" [class.invalid]="
           emailInput.invalid && (emailInput.dirty || emailInput.touched)
-          "
-      />
-      <!-- <label for="email" [ngClass]="{'error-label': emailInput.invalid && (emailInput.dirty || emailInput.touched)}" >Email<sup>*</sup></label> -->
-      <div
-        class="error"
-        *ngIf="emailInput.invalid && (emailInput.dirty || emailInput.touched)"
-      >
-        <span *ngIf="emailInput.errors?.required" class="font-13"
-          >Email is required.</span
-        >
-        <span *ngIf="emailInput.errors?.pattern" class="font-13"
-          >Enter a valid email address.</span
-        >
-      </div>
-    </div>
-    <!-- Password -->
-    <!-- <div class="input-field password-wrapper">
-      <div class="password-field">
-        <label for="password" [ngClass]="{'error-label': passwordInput.invalid && (passwordInput.dirty || passwordInput.touched)}" >Password<sup>*</sup></label>
-        <div class="" style="position: relative;">
-          <input
-          id="password"
-          name="password"
-          placeholder="Enter Password"
-          [type]="passwordVisible ? 'text' : 'password'"
-          [(ngModel)]="EditData.password"
-          #passwordInput="ngModel"
-          required
-          minlength="3"
-          (input)="onInputChange()"
-          [class.invalid]="
+          " />
+                    <!-- <label for="email" [ngClass]="{'error-label': emailInput.invalid && (emailInput.dirty || emailInput.touched)}" >Email<sup>*</sup></label> -->
+                    <div class="error" *ngIf="emailInput.invalid && (emailInput.dirty || emailInput.touched)">
+                        <span *ngIf="emailInput.errors?.required" class="font-13">Email is required.</span>
+                        <span *ngIf="emailInput.errors?.pattern" class="font-13">Enter a valid email address.</span>
+                    </div>
+                </div>
+                
+                <!-- Password -->
+                <div class="input-field password-wrapper" *ngIf="isAdmin">
+                    <div class="password-field">
+                        <label for="password"
+                            [ngClass]="{'error-label': passwordInput.invalid && (passwordInput.dirty || passwordInput.touched)}">Password<sup>*</sup></label>
+                        <div class="" style="position: relative;">
+                            <input id="password" name="password" placeholder="Enter Password"
+                                
+                                [type]="passwordVisible ? 'text' : 'password'" [(ngModel)]="UserData.password"
+                                #passwordInput="ngModel" [required]="!userId" minlength="3" (input)="onInputChange()"
+                                [class.invalid]="
               passwordInput.invalid &&
               (passwordInput.dirty || passwordInput.touched)
-              "
-          /> -->
-          <!-- <label for="password" [ngClass]="{'error-label': passwordInput.invalid && (passwordInput.dirty || passwordInput.touched)}" >Password<sup>*</sup></label> -->
+              " />
+                            <!-- <label for="password" [ngClass]="{'error-label': passwordInput.invalid && (passwordInput.dirty || passwordInput.touched)}" >Password<sup>*</sup></label> -->
 
-          <!-- <i
-            class="fa"
-            [ngClass]="passwordVisible ? 'fa-eye-slash' : 'fa-eye'"
-            (click)="togglePasswordVisibility()"
-            style="cursor: pointer; margin-left: -30px"
-          ></i>
-        </div>
-      </div>
+                            <i class="fa" [ngClass]="passwordVisible ? 'fa-eye-slash' : 'fa-eye'"
+                                (click)="togglePasswordVisibility()" style="cursor: pointer; margin-left: -30px"></i>
+                        </div>
+                    </div>
 
-      <div
-        class="error"
-        *ngIf="
+                    <div class="error" *ngIf="
           passwordInput.invalid &&
           (passwordInput.dirty || passwordInput.touched)
-        "
-      >
-        <span *ngIf="passwordInput.errors?.required" class="font-13"
-          >Password is required.</span
-        >
-        <span *ngIf="passwordInput.errors?.minlength" class="font-13"
-          >Minimum 3 characters required.</span
-        >
-      </div>
-    </div> -->
+        ">
+                        <span *ngIf="passwordInput.errors?.required" class="font-13">Password is required.</span>
+                        <span *ngIf="passwordInput.errors?.minlength" class="font-13">Minimum 3 characters
+                            required.</span>
+                    </div>
+                </div>
 
-    <!-- Conatct No. -->
-    <div class="input-field">
-      <label for="contact_no" [ngClass]="{'error-label': contact_noInput.invalid && (contact_noInput.dirty || contact_noInput.touched)}">Contact No.<sup>*</sup></label>
-      <input
-        id="contact_no"
-        name="contact_no"
-        placeholder="Enter Contact No."
-        type="text"
-        [(ngModel)]="EditData.contact_no"
-        #contact_noInput="ngModel"
-        required
-        minlength="10"
-        maxlength="10"
-        (input)="onInputChange()"
-        (keypress)="restrictNonNumeric($event)"
-        [class.invalid]="
-          contact_noInput.invalid && (contact_noInput.dirty || contact_noInput.touched)"
-      />
-      <!-- <label for="contact_no" [ngClass]="{'error-label': contact_noInput.invalid && (contact_noInput.dirty || contact_noInput.touched)}">Contact No.<sup>*</sup></label> -->
-      <div class="error" *ngIf="contact_noInput.invalid && (contact_noInput.dirty || contact_noInput.touched)">
-        <span *ngIf="contact_noInput.errors?.required" class="font-13">Conatct No. is required.</span>
-      </div>
+                <!-- Conatct No. -->
+                <div class="input-field">
+                    <label for="contact_no"
+                        [ngClass]="{'error-label': contact_noInput.invalid && (contact_noInput.dirty || contact_noInput.touched)}">Contact
+                        No.<sup>*</sup></label>
+                    <input id="contact_no" name="contact_no" placeholder="Enter Contact No." type="text"
+                        [(ngModel)]="UserData.contact_no" #contact_noInput="ngModel" required minlength="10"
+                        maxlength="10" (input)="onInputChange()" (keypress)="restrictNonNumeric($event)"
+                        [class.invalid]="
+          contact_noInput.invalid && (contact_noInput.dirty || contact_noInput.touched)" />
+                    <!-- <label for="contact_no" [ngClass]="{'error-label': contact_noInput.invalid && (contact_noInput.dirty || contact_noInput.touched)}">Contact No.<sup>*</sup></label> -->
+                    <div class="error"
+                        *ngIf="contact_noInput.invalid && (contact_noInput.dirty || contact_noInput.touched)">
+                        <span *ngIf="contact_noInput.errors?.required" class="font-13">Conatct No. is required.</span>
+                    </div>
+                </div>
+
+                <!-- User Type -->
+                <div class="input-field">
+                    <label for="user_type"
+                        [ngClass]="{'error-label': userTypeInput.invalid && (userTypeInput.dirty || userTypeInput.touched)}">User
+                        Type<sup>*</sup></label>
+                    <select class="dropdown capitalize" id="user_type" name="user_type"
+                        [(ngModel)]="UserData.user_type_id" #userTypeInput="ngModel" required (change)="onInputChange()"
+                        [class.invalid]="userTypeInput.invalid && (userTypeInput.dirty || userTypeInput.touched)">
+                        <option value="" disabled selected class="capitalize">Select User Type</option>
+                        <option *ngFor="let type of userTypeList" class="capitalize" [value]="type.id">{{ type.user_type
+                            }}
+                        </option>
+                    </select>
+                    <!-- <label for="user_type" [ngClass]="{'error-label': userTypeInput.invalid && (userTypeInput.dirty || userTypeInput.touched)}" >User Type<sup>*</sup></label> -->
+                    <div class="error" *ngIf="userTypeInput.invalid && (userTypeInput.dirty || userTypeInput.touched)">
+                        <span *ngIf="userTypeInput.errors?.required" class="font-13">User Type is required.</span>
+                    </div>
+                </div>
+
+                <!-- Designation -->
+                <div class="input-field">
+                    <label for="designation"
+                        [ngClass]="{'error-label': designationInput.invalid && (designationInput.dirty || designationInput.touched)}">Designation<sup>*</sup></label>
+                    <select class="dropdown capitalize" id="designation" name="designation"
+                        [(ngModel)]="UserData.designation_id" #designationInput="ngModel" required
+                        (change)="onInputChange()"
+                        [class.invalid]="designationInput.invalid && (designationInput.dirty || designationInput.touched)">
+                        <option value="" disabled selected class="capitalize">Select Designation</option>
+                        <option *ngFor="let desig of designationList" class="capitalize" [value]="desig.id">{{
+                            desig.designation }}
+                        </option>
+                        <option [value]="null">Others</option>
+                    </select>
+                    <!-- <label for="designation" [ngClass]="{'error-label': designationInput.invalid && (designationInput.dirty || designationInput.touched)}" >Designation<sup>*</sup></label> -->
+                    <div class="error"
+                        *ngIf="designationInput.invalid && (designationInput.dirty || designationInput.touched)">
+                        <span *ngIf="designationInput.errors?.required" class="font-13">Designation is required.</span>
+                    </div>
+                </div>
+                 <!-- Others -->
+                <div class="input-field" *ngIf="isOthers">
+                    <label for="name"
+                        [ngClass]="{'error-label': designationInput.invalid && (designationInput.dirty || designationInput.touched)}">Designation<sup>*</sup></label>
+                    <input id="others" name="others" type="text" [(ngModel)]="UserData.others" #designationInput="ngModel" required
+                        minlength="3" placeholder="Enter Name" (input)="onInputChange()" [class.invalid]="
+          designationInput.invalid && (designationInput.dirty || designationInput.touched)
+          " />
+                    <!-- <label for="name" [ngClass]="{'error-label': nameInput.invalid && (nameInput.dirty || nameInput.touched)}" >Name<sup>*</sup></label> -->
+                    <div class="error" *ngIf="designationInput.invalid && (designationInput.dirty || designationInput.touched)">
+                        <span *ngIf="designationInput.errors?.required" class="font-13">Designation is required.</span>
+                        <span *ngIf="designationInput.errors?.minlength" class="font-13">Minimum length is 3</span>
+                    </div>
+                </div>
+
+
+                <!-- Submit -->
+                <!-- <button type="submit">Login</button> -->
+                <button type="submit" [disabled]="(UserForm.invalid || isLoading )">
+                    <!-- {{ isLoading ? "Logging in..." : "Login" }} -->
+                    Submit
+                </button>
+
+                <!-- Server or Login error -->
+                <p class="error" *ngIf="errorMessage">{{ errorMessage }}</p>
+            </form>
+
+        </div>
     </div>
+    <div class="register-container outlet_wrapper" *ngIf="userId">
+        <div class="content_wrapper inner-flex inner-flex-large">
+            <h2 class="font-22">Permissions</h2>
+            <div class="modules_wrapper inner-flex inner-flex-medium" *ngIf="permissions.length > 0">
+                <div class="module_block" *ngFor="let module of modules_list; let i = index">
+                    <h2 class="heading_text tab_name font-18">{{ modules_list[i].module_name }}</h2>
+                    <div class="checkbox-container">
+                        <div class="checkbox">
+                            <input type="checkbox" [(ngModel)]="permissions[i].can_add" id="{{modules_list[i].module_name}}-can_add">
+                            <label class="font-18" for="{{modules_list[i].module_name}}-can_add">Can Add</label>
+                        </div>
+                        <div class="checkbox">
+                            <input type="checkbox" [(ngModel)]="permissions[i].can_edit" id="{{modules_list[i].module_name}}-can_edit" >
+                            <label class="font-18" for="{{modules_list[i].module_name}}-can_edit" >Can Edit</label>
+                        </div>
+                        <div class="checkbox">
+                            <input type="checkbox" [(ngModel)]="permissions[i].can_view" id="{{modules_list[i].module_name}}-can_view" >
+                            <label class="font-18" for="{{modules_list[i].module_name}}-can_view" >Can View</label>
+                        </div>
+                        <div class="checkbox">
+                            <input type="checkbox" [(ngModel)]="permissions[i].can_export" id="{{modules_list[i].module_name}}-can_export" >
+                            <label class="font-18" for="{{modules_list[i].module_name}}-can_export" >Can Export</label>
+                        </div>
+                        <div class="checkbox">
+                            <input type="checkbox" [(ngModel)]="permissions[i].can_delete" id="{{modules_list[i].module_name}}-can_delete" >
+                            <label class="font-18" for="{{modules_list[i].module_name}}-can_delete" >Can Delete</label>
+                        </div>
+                    </div>
+                </div>
 
-    <!-- User Type -->
-    <div class="input-field">
-      <label for="user_type" [ngClass]="{'error-label': userTypeInput.invalid && (userTypeInput.dirty || userTypeInput.touched)}" >User Type<sup>*</sup></label>
-      <select
-        class="dropdown capitalize"
-        id="user_type"
-        name="user_type"
-        [(ngModel)]="EditData.user_type_id"
-        #userTypeInput="ngModel"
-        required
-        (change)="onInputChange()"
-        [class.invalid]="userTypeInput.invalid && (userTypeInput.dirty || userTypeInput.touched)"
-        >
-        <option value="" disabled selected class="capitalize">Select User Type</option>
-        <option *ngFor="let type of userTypeList" class="capitalize" [value]="type.id">{{ type.user_type }}</option>
-      </select>
-      <!-- <label for="user_type" [ngClass]="{'error-label': userTypeInput.invalid && (userTypeInput.dirty || userTypeInput.touched)}" >User Type<sup>*</sup></label> -->
-      <div class="error" *ngIf="userTypeInput.invalid && (userTypeInput.dirty || userTypeInput.touched)">
-        <span *ngIf="userTypeInput.errors?.required" class="font-13">User Type is required.</span>
+                <button type="submit" (click)="changePermissions()">
+                    Update Permissions
+                </button>
+            </div>
+        </div>
     </div>
-    </div>
-
-    <!-- Designation -->
-    <div class="input-field">
-    <label for="designation" [ngClass]="{'error-label': designationInput.invalid && (designationInput.dirty || designationInput.touched)}" >Designation<sup>*</sup></label>
-      <select
-      class="dropdown capitalize"
-      id="designation"
-      name="designation"
-      [(ngModel)]="EditData.designation_id"
-      #designationInput="ngModel"
-      required
-      (change)="onInputChange()"
-      [class.invalid]="designationInput.invalid && (designationInput.dirty || designationInput.touched)"
-      >
-      <option value="" disabled selected class="capitalize">Select Designation</option>
-      <option *ngFor="let desig of designationList" class="capitalize" [value]="desig.id">{{ desig.designation }}</option>
-    </select>
-    <!-- <label for="designation" [ngClass]="{'error-label': designationInput.invalid && (designationInput.dirty || designationInput.touched)}" >Designation<sup>*</sup></label> -->
-    <div class="error" *ngIf="designationInput.invalid && (designationInput.dirty || designationInput.touched)">
-        <span *ngIf="designationInput.errors?.required" class="font-13">Designation is required.</span>
-    </div>
-    </div>
-
-
-
-    <!-- Submit -->
-    <!-- <button type="submit">Login</button> -->
-    <button type="submit" [disabled]="EditForm.invalid || isLoading">
-      <!-- {{ isLoading ? "Logging in..." : "Login" }} -->
-        Submit
-    </button>
-
-    <!-- Server or Login error -->
-    <p class="error" *ngIf="errorMessage">{{ errorMessage }}</p>
-  </form>
-
-  </div>
-</div>

@@ -9,7 +9,8 @@ class Admin_model extends CI_Model
     }
 
      public function user_auth($data){
-        $query = $this->db->get_where('users', array('email' => $data['email'], 'password' => $data['password']));
+        // $query = $this->db->get_where('users', array('email' => $data['email'], 'password' => $data['password']));
+        $query = $this->db->get_where('users', array('email' => $data['email'], 'password' => $data['password'],'deleted_at'=>NULL));
         return $query->row_array();
     }
 

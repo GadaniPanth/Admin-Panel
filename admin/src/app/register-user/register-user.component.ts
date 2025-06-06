@@ -29,12 +29,12 @@ export class RegisterUserComponent implements OnInit {
   ngOnInit() {
     this.adminSevice.get_userTypeList().subscribe((res)=>{
       this.userTypeList = res.list;
-      console.log(this.userTypeList);
+      // console.log(this.userTypeList);
     })
 
     this.adminSevice.get_designationList().subscribe((res)=>{
       this.designationList = res.list;
-      console.log(this.designationList);
+      // console.log(this.designationList);
     })
   }
 
@@ -51,7 +51,7 @@ export class RegisterUserComponent implements OnInit {
     //   console.log(`${pair[0]}:`, pair[1]);
     // }
 
-    console.log(this.RegisterData);
+    // console.log(this.RegisterData);
 
     this.adminSevice.create_user(this.RegisterData).subscribe((res)=>{
        if(res.success){

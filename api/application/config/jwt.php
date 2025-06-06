@@ -71,3 +71,4 @@ $config['token_header'] = 'authorization';
 */
 
 $config['token_expire_time'] = 86400;
+// $config['token_expire_time'] = 60;

@@ -209,7 +209,7 @@ span.closedTag {
   font-family: var(--semibold-font);
   color: var(--black-color);
 }
-button {
+/* button {
   width: fit-content;
   padding: 0.75rem 1rem;
   font-size: 1.05rem;
@@ -220,7 +220,7 @@ button {
   cursor: pointer;
   transition: all 0.4s ease;
   background: #5d87ff;
-}
+} */
 
 /* Overlay panel */
 .overlay-data {
@@ -351,4 +351,11 @@ button {
   margin: 5px 0;
   font-size: 14px;
   color: #333;
+}
+.status-filter-cont {
+    display: flex;
+    flex-direction: row;
+    gap: 0.5rem;
+    align-items: center;
+    width: 100%;
 }

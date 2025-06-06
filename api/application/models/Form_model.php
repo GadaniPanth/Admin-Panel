@@ -23,12 +23,19 @@ class Form_model extends CI_Model
         return $this->db->update('forms', $data);
     }
 
-    public function get_forms($search = '', $limit = 10, $offset = 0) {
+    public function get_forms($search = '', $limit = 10, $offset = 0, $is_active) {
         if (!empty($search)) {
             $this->db->like('form_title', $search);
         }
+        // echo json_encode(is_null($is_active));
+        // exit;
 
+        if (!is_null($is_active) && $is_active != "null" && ((int)$is_active == 0 || (int)$is_active == 1)) {
+            $this->db->where('is_active', $is_active);
+        }
+        
         $this->db->limit($limit, $offset);
+        $this->db->where('deleted_at', NULL);
         $query = $this->db->get('forms');
         return $query->result();
     }

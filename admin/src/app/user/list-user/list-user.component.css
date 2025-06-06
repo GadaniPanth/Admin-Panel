@@ -77,21 +77,23 @@ th, td {
     border: 1px solid #5D87FF; */
     width: fit-content;
     padding: 0.75rem 1rem;
-    font-size: 1.05rem;
-    font-weight: 600;
+    /* padding: 0 1rem; */
+    /* font-size: 1.05rem;
+    font-weight: 600; */
     color: white;
     border: none;
     border-radius: 5px;
     cursor: pointer;
     transition: all 0.4s ease;
     background: #5D87FF;
+    font-family: var(--regular-font);
 }
 
-/* .row-flex button:hover {
-    background: white;
-    color: #5D87FF;
-    border: 1px solid #5D87FF;
-} */
+.row-flex button:hover {
+    background: #6A90FF;
+    /* color: #5D87FF; */
+    /* border: 1px solid #5D87FF; */
+}
 
 .PopupOverlay {
   width: 100%;
@@ -129,4 +131,41 @@ th, td {
 .statusPopup.active {
   transform: translate(-50%, -50%) scale(1);
   pointer-events: all;
+}
+
+.filters_container {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  /* max-width: 1200px; */
+  /* margin-left: auto; */
+}
+
+.filters_container .icon {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  right: 1rem;
+  /* height: 18px; */
+  width: 20px;
+  display: flex;
+  align-items: center;
+}
+
+.filters_container .right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+
+.status-filter-cont {
+    display: flex;
+    flex-direction: row;
+    gap: 0.5rem;
+    align-items: center;
+    width: 100%;
 }

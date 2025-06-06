@@ -1,0 +1,167 @@
+<div class="profile-wrapper outlet_wrapper">
+  <div class="row-flex jsb page-header relative">
+    <div class="page-header-text">
+      <h2 class="heading_text tab_name font-18">My Profile</h2>
+      <ul class="breadcrumb">
+        <div class="breadcrumb row-flex" style="align-items: center">
+          <a routerLink="/dashboard">Dashboard</a>
+          <img
+            style="width: 8px; height: 8px; margin: 0 0.8rem"
+            src="assets/images/circle-fill.svg"
+          />
+          <a routerLink="/users">Users</a>
+          <img
+            style="width: 8px; height: 8px; margin: 0 0.8rem"
+            src="assets/images/circle-fill.svg"
+          />
+          User Profile
+        </div>
+      </ul>
+    </div>
+    <!-- <button class="cursor_pointer font-16" [routerLink]="'/register'">
+      Add User
+    </button> -->
+    <img class="header-image" src="assets/images/Chat.png" alt="" />
+  </div>
+
+  <div class="profile-container content_wrapper">
+    <div class="profile-img relative cursor_pointer">
+      <img [src]="imagePreview || userData.profile_pic || 'assets/images/default.svg'" alt="Profile" class="relative" />
+      <div class="input-image" *ngIf="!(imagePreview || userData.profile_pic)">
+        <input type="file" name="profile_pic" id="profile_pic" (change)="changedImage($event)">
+      </div>
+      <div class="remove-image" (click)="removeImage($event)" *ngIf="imagePreview || userData.profile_pic">
+          <span class="material-symbols-outlined" > delete </span>
+      </div>
+    </div>
+    <form (ngSubmit)="updateProfile()" *ngIf="userData">
+      <div class="">
+        <label>Name<sup>*</sup>:</label>
+        <input
+          type="text"
+          [(ngModel)]="userData.name"
+          name="name"
+          required
+          #nameInput="ngModel"
+          minlength="3"
+          [class.invalid]="
+            nameInput.invalid && (nameInput.dirty || nameInput.touched)
+          "
+        />
+        <div
+          class="error"
+          *ngIf="nameInput.invalid && (nameInput.dirty || nameInput.touched)"
+        >
+          <span *ngIf="nameInput.errors?.required" class="font-13"
+            >Name is required.</span
+          >
+          <span *ngIf="nameInput.errors?.minlength" class="font-13"
+            >Name is more than 3 letters.</span
+          >
+        </div>
+      </div>
+
+      <div class="">
+        <label>Email<sup>*</sup>:</label>
+        <input
+          type="email"
+          [(ngModel)]="userData.email"
+          #emailInput="ngModel"
+          name="email"
+          required
+          minlength="3"
+          pattern="^[a-zA-Z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
+          [class.invalid]="
+            emailInput.invalid && (emailInput.dirty || emailInput.touched)
+          "
+        />
+        <div
+          class="error"
+          *ngIf="emailInput.invalid && (emailInput.dirty || emailInput.touched)"
+        >
+          <span *ngIf="emailInput.errors?.required" class="font-13"
+            >Email is required.</span
+          >
+          <span *ngIf="emailInput.errors?.pattern" class="font-13"
+            >Enter a valid email address.</span
+          >
+        </div>
+      </div>
+      <div class="">
+        <label>Contact No<sup>*</sup>:</label>
+        <input
+          type="text"
+          [(ngModel)]="userData.contact_no"
+          name="contact_no"
+          #contact_noInput="ngModel"
+          required
+          minlength="10"
+          maxlength="10"
+          (keypress)="restrictNonNumeric($event)"
+          [class.invalid]="
+            contact_noInput.invalid &&
+            (contact_noInput.dirty || contact_noInput.touched)
+          "
+        />
+        <div
+          class="error"
+          *ngIf="
+            contact_noInput.invalid &&
+            (contact_noInput.dirty || contact_noInput.touched)
+          "
+        >
+          <span *ngIf="contact_noInput.errors?.required" class="font-13"
+            >Contact Number is required.</span
+          >
+          <span *ngIf="contact_noInput.errors?.minlength" class="font-13"
+            >Contact Number min. number is 10.</span
+          >
+        </div>
+      </div>
+
+       <!-- Designation -->
+        <div class="input-field">
+          <label for="designation"
+            [ngClass]="{'error-label': designationInput.invalid && (designationInput.dirty || designationInput.touched)}">Designation<sup>*</sup></label>
+          <select class="dropdown capitalize" id="designation" name="designation"
+            [(ngModel)]="userData.designation_id" #designationInput="ngModel" required
+            (change)="onInputChange()"
+            [class.invalid]="designationInput.invalid && (designationInput.dirty || designationInput.touched)">
+            <option value="" disabled selected class="capitalize">Select Designation</option>
+            <option *ngFor="let desig of designationList" class="capitalize" [value]="desig.id">{{
+                desig.designation }}
+            </option>
+            <option [value]="null">Others</option>
+          </select>
+          <!-- <label for="designation" [ngClass]="{'error-label': designationInput.invalid && (designationInput.dirty || designationInput.touched)}" >Designation<sup>*</sup></label> -->
+          <!-- <div class="error"
+            *ngIf="designationInput.invalid && (designationInput.dirty || designationInput.touched)">
+            <span *ngIf="designationInput.errors?.required" class="font-13">Designation is required.</span>
+          </div> -->
+        </div>
+         <!-- Others -->
+          <div class="input-field" *ngIf="isOthers">
+            <label for="others"
+                [ngClass]="{'error-label': designationInput.invalid && (designationInput.dirty || designationInput.touched)}">Add Designation<sup>*</sup></label>
+            <input id="others" name="others" type="text" [(ngModel)]="userData.others" #designationInput="ngModel" required
+                minlength="3" placeholder="Enter Name" (input)="onInputChange()" [class.invalid]="
+  designationInput.invalid && (designationInput.dirty || designationInput.touched)
+  " />
+            <!-- <label for="name" [ngClass]="{'error-label': nameInput.invalid && (nameInput.dirty || nameInput.touched)}" >Name<sup>*</sup></label> -->
+            <div class="error" *ngIf="designationInput.invalid && (designationInput.dirty || designationInput.touched)">
+              <span *ngIf="designationInput.errors?.required" class="font-13">Designation is required.</span>
+              <span *ngIf="designationInput.errors?.minlength" class="font-13">Minimum length is 3</span>
+            </div>
+          </div>
+
+      <button
+        type="submit"
+        [disabled]="
+          contact_noInput.invalid || emailInput.invalid || nameInput.invalid || designationInput.invalid
+        "
+      >
+        Submit
+      </button>
+    </form>
+  </div>
+</div>

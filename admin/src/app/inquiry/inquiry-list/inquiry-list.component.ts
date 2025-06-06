@@ -1,6 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { AdminService } from 'src/app/_services/admin.service';
+import { PagerService } from 'src/app/_services/pager-service';
+import * as moment from 'moment';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { ExcelService } from 'src/app/_services/excel.service';
+import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-inquiry-list',
@@ -9,16 +14,90 @@ import { AdminService } from 'src/app/_services/admin.service';
 })
 export class InquiryListComponent implements OnInit {
 
-  constructor(public adminService: AdminService, private toastr: ToastrService,
+  constructor(public adminService: AdminService, private toastr: ToastrService, private pagerService: PagerService, private router: Router, private route: ActivatedRoute, private excelService: ExcelService,
   ) { }
 
+
+  isDashboard: boolean = false;
   todayDate: any;
   user_id: any;
 
   ngOnInit() {
-    this.inquiryList();
-    this.inquiryType();
-    this.inquiryStatus();
+
+    const currentUrl = this.router.url;
+    this.isDashboard = currentUrl.startsWith('/dashboard');
+
+    this.router.events
+      .pipe(filter(event => event instanceof NavigationEnd))
+      .subscribe((event: NavigationEnd) => {
+        const url = event.urlAfterRedirects || event.url;
+        this.isDashboard = url.startsWith('/dashboard');
+      });
+
+
+    if (this.isDashboard) {
+      this.inquiryList();
+      this.inquiryStatus();
+    }
+    else {
+      // 
+      this.route.queryParams.subscribe(params => {
+        const hasParams = Object.keys(params).length > 0;
+        // Default API call when there are no query parameters (first load)
+        if (!hasParams) {
+          this.inquiryList();
+          this.inquiryType();
+          this.inquiryStatus();
+          this.inquiryStatusCounter();
+        } else {
+          this.inquiryObj.page = params['page'] ? Number(params['page']) : 1;
+          this.inquiryObj.from_date = params['from'] ? params['from'] : '';
+          this.inquiryObj.to_date = params['to'] ? params['to'] : '';
+          this.inquiryObj.status_id = params['status_id'] ? params['status_id'] : '';
+          // this.productObj.status = params.hasOwnProperty('status') && params['status'].length > 0 ? params['status'] : '';
+          // this.productObj.search = params['search'] ? params['search'] : '';
+
+          if (params['from'] && params['to']) {
+            this.filters.date = {
+              from_date: moment(new Date(params['from'])),
+              to_date: moment(new Date(params['to']))
+            };
+
+            this.displayDates.start_time = moment(new Date(params['from'])).format('DD/MM/YYYY');
+            this.displayDates.end_time = moment(new Date(params['to'])).format('DD/MM/YYYY');
+          }
+
+          this.inquiryList();
+          this.inquiryType();
+          this.inquiryStatus();
+          this.inquiryStatusCounter();
+        }
+      });
+    }
+    // 
+
+    // p
+
+    this.permissionObj = this.adminService.userpermissions;
+
+    for (const key in this.permissionObj) {
+      if (this.permissionObj[key]['slug'] == 'inquiry') {
+        for (const k in this.permissionObj[key]) {
+          if (this.permissionObj[key][k] == 1) {
+            this.permissions.push(k);
+          }
+        }
+      }
+    }
+
+
+    // p
+
+
+
+    // this.inquiryList();
+    // this.inquiryType();
+    // this.inquiryStatus();
 
     // const today = new Date();
 
@@ -32,12 +111,107 @@ export class InquiryListComponent implements OnInit {
 
   }
 
+
+  permissions: any = [];
+  permissionObj: any;
+
+  //date S
+  public displayDates = {
+    start_time: "",
+    end_time: ""
+  }
+  //For Date Filters //
+  filters: any = {
+    date: {
+      from_date: "",
+      to_date: "",
+    }
+  }
+
+
+
+  removeDateRange() {
+
+    this.router.navigate([], {
+      queryParams: {
+        'from': '',
+        'to': '',
+      },
+      queryParamsHandling: 'merge', // This keeps existing query params
+    });
+
+    this.displayDates = {
+      start_time: "",
+      end_time: ""
+    };
+
+    this.filters.date = { from_date: "", to_date: "" };
+    this.inquiryObj.from_date = "";
+    this.inquiryObj.to_date = "";
+    this.resetPagination();
+    // this.getProductList();
+    // this.inquiryList();
+
+  }
+
+  ranges: any = {
+    'All': [31516200, moment().subtract('days').endOf('day')],
+    'Today': [moment(), moment()],
+    'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+    'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+    'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+    'This Month': [moment().startOf('month'), moment().endOf('month')],
+    'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+  }
+  invalidDates: moment.Moment[] = [moment().add(2, 'days'), moment().add(3, 'days'), moment().add(5, 'days')];
+  isInvalidDate = (m: moment.Moment) => {
+    return this.invalidDates.some(d => d.isSame(m, 'day'))
+  }
+  datesChanges(range) {
+    if (range.startDate && range.endDate) {
+      this.displayDates.start_time = "";
+      this.displayDates.end_time = "";
+
+      this.inquiryObj.from_date = "";
+      this.inquiryObj.to_date = "";
+
+      if (range.startDate && range.endDate) {
+        this.displayDates.start_time = range.startDate.format('DD/MM/YYYY');
+        this.displayDates.end_time = range.endDate.format('DD/MM/YYYY');
+
+        this.inquiryObj.from_date = range.startDate.format('YYYY-MM-DD');
+        this.inquiryObj.to_date = range.endDate.format('YYYY-MM-DD');
+      }
+
+
+      this.resetPagination();
+      // this.inquiryList();
+    }
+  }
+
+  setDateQuery(from_date, to_date) {
+    if (from_date && to_date) {
+      this.router.navigate([], {
+        queryParams: {
+          'from': from_date,
+          'to': to_date,
+        },
+        queryParamsHandling: 'merge', // This keeps existing query params
+      });
+    }
+
+    // console.log(this.productObj);
+  }
+  //For Date Filters //
+
+
+  // date E
+
+  // history for (today)
   formatUpdatedAt(dateStr: string): string {
     const date = new Date(dateStr);
     return `${date.getDate().toString().padStart(2, '0')}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getFullYear()}`;
   }
-
-
 
   inquiryObj: any = {
     page: 1,
@@ -51,9 +225,11 @@ export class InquiryListComponent implements OnInit {
     to_date: '',
     order_by: '',
     order_type: '',
+    // form_id: ''
   }
 
   inquiry_List: any = [];
+  total_records: any = 0;
 
   isLoading: any = false;
   inquiryList() {
@@ -61,14 +237,50 @@ export class InquiryListComponent implements OnInit {
     this.adminService.inquiryList(this.inquiryObj).subscribe((response: any) => {
       if (response.success == 1) {
         this.inquiry_List = response.list;
+        this.total_records = response.total_records;
+        this.inquiryObj.total = response.total_records;
         this.isLoading = false;
+        if (this.inquiry_List && this.inquiry_List.length > 0) {
+          this.setUsersPage(this.inquiryObj.page, 0);
+        }
       }
       else {
         this.inquiry_List = [];
         this.isLoading = false;
+        this.total_records = 0
       }
     })
   }
+
+
+
+
+  //  page
+  public usersPager: any = [];
+  setUsersPage(page: number, flag: number) {
+    this.usersPager = this.pagerService.getPager(this.inquiryObj.total, page, this.inquiryObj.limit);
+    this.inquiryObj.page = this.usersPager.currentPage;
+
+    this.router.navigate([], {
+      queryParams: {
+        page: this.inquiryObj.page
+      },
+      queryParamsHandling: 'merge', // This keeps existing query params
+    });
+
+    if (flag == 1) {
+      // this.getProductList();
+      this.inquiryList();
+    }
+  }
+
+
+  resetPagination() {
+    this.inquiryObj.page = 1;
+  }
+
+
+  // 
 
 
   onFilter() {
@@ -86,7 +298,7 @@ export class InquiryListComponent implements OnInit {
   inquiry_type_list: any = [];
 
   inquiryType() {
-    this.adminService.formList({}).subscribe((response: any) => {
+    this.adminService.inquiryTypeList({}).subscribe((response: any) => {
       if (response.success == 1) {
         this.inquiry_type_list = response.list;
       }
@@ -111,7 +323,9 @@ export class InquiryListComponent implements OnInit {
 
 
   isOverlayOpen: boolean = false;
-  inquiryDetailObj: any = {}
+  inquiryDetailObj: any = {
+    other: ''
+  }
   toggleDetail(data: any) {
     this.inquiryDetailObj = data;
     // console.log(data);
@@ -131,7 +345,7 @@ export class InquiryListComponent implements OnInit {
   // follow ups
   public statusObj: any = {
     remarks: "",
-    login_user_id: this.adminService.getTokenData().user_id
+    // login_user_id: this.adminService.getTokenData().user_id
   };
 
 
@@ -145,6 +359,9 @@ export class InquiryListComponent implements OnInit {
 
     // this.isStatusChange = true;
     if (form.valid) {
+
+      this.statusObj.login_user_id = this.adminService.getTokenData().user_id;
+
       this.adminService
         .change_status_inquiry(this.statusObj)
         .subscribe((response: any) => {
@@ -156,6 +373,7 @@ export class InquiryListComponent implements OnInit {
             // this.isStatusChange = false;
             this.statusOpenF = false;
             this.inquiryList();
+            this.inquiryStatusCounter();
             this.toastr.success(response.message);
           } else {
             // this.isStatusChange = false;
@@ -235,5 +453,79 @@ export class InquiryListComponent implements OnInit {
     } else {
       document.body.classList.remove('no-scroll-body');
     }
+  }
+
+
+  inquiry_ststus_counter: any = {};
+
+  inquiryStatusCounter() {
+    this.adminService.inquiryStatusCounter({}).subscribe((response: any) => {
+      if (response.success == 1) {
+        this.inquiry_ststus_counter = response.data;
+      }
+      else {
+        this.inquiry_ststus_counter = {}
+      }
+    })
+  }
+
+  onFilterstatusTab(id: any) {
+    this.router.navigate([], {
+      queryParams: {
+        'status_id': id,
+      },
+      queryParamsHandling: 'merge', // This keeps existing query params
+    });
+    this.inquiryObj.status_id = id;
+    this.inquiryObj.page = 1;
+    this.inquiryList();
+  }
+
+
+  // excel
+
+  exportList: any = [];
+  exportAsXLSX(): void {
+    var i = 1; let t = this;
+    var obj = [];
+
+    let headers = [];
+    const payload = {
+      limit: 1000000
+    }
+    this.adminService.inquiryList(payload).subscribe((response: any) => {
+      if (response.success == 1) {
+        this.exportList = response.list;
+
+        this.exportList.map(function (a) {
+          let exportData = {};
+
+          exportData['Sr.No'] = i++;
+          exportData['Name'] = a.name;
+          exportData['Email'] = a.email ? a.email : "-";
+          exportData['Contact_no'] = a.contact_no ? a.contact_no : "-";
+          exportData['Message'] = a.message ? a.message : "";
+          exportData['Type'] = a.form_name ? a.form_name : "-";
+          exportData['Status'] = a.status ? a.status : "";
+          exportData['Remarks'] = a.remarks ? a.remarks : "";
+          exportData['Created At'] = a.created_at_formated ? a.created_at_formated : "";
+          exportData['Last Updated At'] = a.last_updated_at ? a.last_updated_at : "";
+          exportData['Closed At'] = a.closed_at ? a.closed_at : "";
+
+          obj.push(exportData);
+        });
+
+        // this.excelService.exportAsExcelFile(obj, headers, "Categories");
+        this.excelService.exportAsExcelFile(obj, headers, "Inquiry")
+      }
+      else {
+      }
+    });
+  }
+
+  // 
+
+  objectKeys(obj: any): string[] {
+    return obj ? Object.keys(obj) : [];
   }
 }

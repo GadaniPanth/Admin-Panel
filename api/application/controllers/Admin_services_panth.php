@@ -93,7 +93,7 @@ class Admin_services_panth extends CI_Controller
         // $email = $data['email'] ?? '';
         // $password = $data['password'] ?? '';
         $email = $this->input->post("email") ?? '';
-        $password = $this->input->post("password") ?? '';
+        $password = md5($this->input->post("password")) ?? '';
 
         // echo json_encode($this->input->post("email"));
         // exit;
@@ -176,8 +176,8 @@ class Admin_services_panth extends CI_Controller
         // echo json_encode($user);
         // echo json_encode(is_null($user->deleted_at));
         // exit;
-        if(!empty($user) && is_null($user->deleted_at)){
-            echo json_encode(['success' => 0,'message' => 'User Already Exists.']);
+        if (!empty($user) && is_null($user->deleted_at)) {
+            echo json_encode(['success' => 0, 'message' => 'User Already Exists with email ' . $email]);
             return;
         }
 
@@ -185,15 +185,74 @@ class Admin_services_panth extends CI_Controller
         // echo json_encode($user);
         // echo json_encode(is_null($user->deleted_at));
         // exit;
-        if(!empty($user) && is_null($user->deleted_at)){
-            echo json_encode(['success' => 0,'message' => 'User Already Exists.']);
+        if (!empty($user) && is_null($user->deleted_at)) {
+            echo json_encode(['success' => 0, 'message' => 'User Already Exists with contact ' . $contact_no]);
             return;
         }
 
+        // $this->load->helper('url');
+        // $this->load->library('upload');
+
+        // $config['upload_path']   = FCPATH . 'uploads/profile_images/';
+        // $config['allowed_types'] = 'jpg|jpeg|png|gif';
+        // $config['encrypt_name']  = FALSE;
+
+        // $this->upload->initialize($config);
+
+        // $profile_pic = '';
+
+        // if (!empty($_FILES['profile_pic']['name'])) {
+        //     if (!$this->upload->do_upload('profile_pic')) {
+        //         echo json_encode(['status' => false, 'message' => $this->upload->display_errors()]);
+        //         return;
+        //     } else {
+        //         $uploaded_data = $this->upload->data();
+        //         $timestamp     = $this->get_current_time();
+        //         $new_name      = $timestamp . '_' . $uploaded_data['file_name'];
+
+        //         $old_path = $uploaded_data['full_path'];
+        //         $new_path = $uploaded_data['file_path'] . $new_name;
+        //         rename($old_path, $new_path);
+
+        //         $profile_pic = $new_name;
+        //     }
+        // } else {
+        //     $profile_pic ='default.jpg';
+        // }
+
+        // echo json_encode(['status' => true, 'filename' => $profile_pic]);
+        // exit();
+
         $user_type_id = $this->input->post('user_type_id');
         $designation_id = $this->input->post('designation_id');
+        if($designation_id == "null"){
+            $others = strtolower($this->input->post('others'));
+            $this->db->where('LOWER(designation)', $others);
+            $result = $this->db->get('designation')->result();
+            // echo json_encode($result);
+            // exit;
+            if(!empty($result)){
+                echo json_encode(['success'=>0,'message'=> 'Designation already Exists!']);
+                return;
+            }
+            $des_data = [
+                'designation' => $this->input->post('others'),
+                'created_at' => time(),
+                'is_active' => 1
+            ];
+            
+            $this->db->insert('designation', $des_data);
+            $designation_id = $this->db->insert_id();
+            // echo $designation_id;
+            // exit;
+        }
+
         $password = $this->input->post('password');
-        // $password = password_hash($password, PASSWORD_BCRYPT);
+        if (empty($password)) {
+            echo json_encode(['success' => 0, 'message' => 'Both password fields are required.']);
+            return;
+        }
+        $password = md5($password);
         $is_active = 1;
         $created_at = $this->get_current_time();
 
@@ -203,6 +262,7 @@ class Admin_services_panth extends CI_Controller
             'contact_no' => $contact_no,
             'user_type_id' => $user_type_id,
             'designation_id' => $designation_id,
+            // 'profile_pic' => $profile_pic,
             'password' => $password,
             'is_active' => $is_active,
             'created_at' => $created_at,
@@ -226,206 +286,7 @@ class Admin_services_panth extends CI_Controller
     }
 
     //Update User
-    // public function update_user($id = null){
-    //     if ($this->input->method() !== 'post') {
-    //         echo json_encode(['success' => 0, 'message' => 'Invalid HTTP method. Use POST method.']);
-    //         return;
-    //     }
-    //     if ($id == null) {
-    //         echo json_encode(['success' => 0, 'message' => 'Required Id as Params.']);
-    //         return;
-    //     }
-
-    //     $user = $this->admin_model->get_user_by_id($id);
-
-    //     $check = $this->db->query(
-    //         "SELECT *  FROM `users`  WHERE email = '" .
-
-    //         $this->input->post('email') . "' AND  contact_no = '" .
-
-    //         $this->input->post('contact_no') . "' AND  id  !="
-    //         . $id
-    //     )->row_array();
-
-
-    //     // echo json_encode($check);
-    //     print_r($check);
-    //     // exit; 
-    //     if (empty($check)) {
-
-    //         $name = !empty($this->input->post('username')) ? $this->input->post('username') : $user->name;
-    //         $email = !empty($this->input->post('email')) ? $this->input->post('email') : $user->email;
-    //         $contact_no = !empty($this->input->post('contact_no')) ? $this->input->post('contact_no') : $user->contact_no;
-    //         $user_type_id = !empty($this->input->post('user_type_id')) ? $this->input->post('user_type_id') : $user->user_type_id;
-    //         $designation_id = !empty($this->input->post('designation_id')) ? $this->input->post('designation_id') : $user->designation_id;
-    //         // $password = !empty($this->input->post('password')) ? $this->input->post('password') : $user->password;
-    //         // $is_active = !empty($this->input->post('is_active')) ? $this->input->post('is_active') : $user->is_active;
-    //         $updated_at = $this->get_current_time();
-
-    //         $user_data = [
-    //             'name' => $name,
-    //             'email' => $email,
-    //             'contact_no' => $contact_no,
-    //             'user_type_id' => $user_type_id,
-    //             'designation_id' => $designation_id,
-    //             // 'password'=> $password,
-    //             // 'is_active'=> $is_active,
-    //             'updated_at' => $updated_at,
-    //         ];
-
-    //         // echo json_encode($user_data);
-    //         // exit;
-
-    //         $result = $this->admin_model->update_user($user->id, $user_data);
-
-    //         if ($result) {
-    //             echo json_encode(['success' => 1, "message" => "User Updated Successfully."]);
-    //             return;
-    //         } else {
-    //             $db_error = $this->db->error();
-    //             echo json_encode(['success' => 0, 'message' => $db_error['message']]);
-    //             return;
-    //         }
-
-    //         echo json_encode(['success' => 0, 'message' => "Something Went Wrong!"]);
-    //     }
-    // }
-
-    // public function update_user($id = null)
-    // {
-    //     if ($this->input->method() !== 'post') {
-    //         echo json_encode(['success' => 0, 'message' => 'Invalid HTTP method. Use POST method.']);
-    //         return;
-    //     }
-    //     if ($id == null) {
-    //         echo json_encode(['success' => 0, 'message' => 'Required Id as Params.']);
-    //         return;
-    //     }
-
-    //     $user = $this->admin_model->get_user_by_id($id);
-
-    //     $check = $this->db->query(
-    //         "SELECT *  FROM `users`  WHERE email = '" .
-
-    //         $this->input->post('email') . "' AND  contact_no = '" .
-
-    //         $this->input->post('contact_no') . "' AND  id  !="
-    //         . $id
-    //     )->row_array();
-
-
-    //     // echo json_encode($check);
-    //     // print_r($check);
-    //     // exit; 
-    //     if (empty($check)) {
-
-    //         $name = !empty($this->input->post('username')) ? $this->input->post('username') : $user->name;
-    //         $email = !empty($this->input->post('email')) ? $this->input->post('email') : $user->email;
-    //         $contact_no = !empty($this->input->post('contact_no')) ? $this->input->post('contact_no') : $user->contact_no;
-    //         $user_type_id = !empty($this->input->post('user_type_id')) ? $this->input->post('user_type_id') : $user->user_type_id;
-    //         $designation_id = !empty($this->input->post('designation_id')) ? $this->input->post('designation_id') : $user->designation_id;
-    //         // $password = !empty($this->input->post('password')) ? $this->input->post('password') : $user->password;
-    //         // $is_active = !empty($this->input->post('is_active')) ? $this->input->post('is_active') : $user->is_active;
-    //         $updated_at = $this->get_current_time();
-
-    //         $user_data = [
-    //             'name' => $name,
-    //             'email' => $email,
-    //             'contact_no' => $contact_no,
-    //             'user_type_id' => $user_type_id,
-    //             'designation_id' => $designation_id,
-    //             // 'password'=> $password,
-    //             // 'is_active'=> $is_active,
-    //             'updated_at' => $updated_at,
-    //         ];
-
-    //         // echo json_encode($user_data);
-    //         // exit;
-
-    //         $result = $this->admin_model->update_user($user->id, $user_data);
-
-    //         if ($result) {
-    //             echo json_encode(['success' => 1, "message" => "User Updated Successfully."]);
-    //             return;
-    //         } else {
-    //             $db_error = $this->db->error();
-    //             echo json_encode(['success' => 0, 'message' => $db_error['message']]);
-    //             return;
-    //         }
-    //     } else {
-    //         echo json_encode(['success' => 0, 'message' => "Email and Contact are already assigned"]);
-    //         return;
-    //     }
-    //     echo json_encode(['success' => 0, 'message' => "Something Went Wrong!"]);
-    // }
-
-
-    //  public function update_user()
-    // {
-    //     if ($this->input->method() !== 'post') {
-    //         echo json_encode(['success' => 0, 'message' => 'Invalid HTTP method. Use POST method.']);
-    //         return;
-    //     }
-
-    //     $id = $this->input->post('user_id');
-
-    //     if ($id == null) {
-    //         echo json_encode(['success' => 0, 'message' => 'Required User Id.']);
-    //         return;
-    //     }
-
-    //     // $user = $this->admin_model->get_user_by_id($id);
-
-    //     $check = $this->db->query(
-    //         "SELECT *  FROM `users`  WHERE id =" . $id
-    //     )->row_array();
-
-    //     // echo json_encode($check);
-    //     // print_r($check);
-    //     // exit; 
-    //     if (empty($check)) {
-
-    //         $name = !empty($this->input->post('username')) ? $this->input->post('username') : $user->name;
-    //         $email = !empty($this->input->post('email')) ? $this->input->post('email') : $user->email;
-    //         $contact_no = !empty($this->input->post('contact_no')) ? $this->input->post('contact_no') : $user->contact_no;
-    //         $user_type_id = !empty($this->input->post('user_type_id')) ? $this->input->post('user_type_id') : $user->user_type_id;
-    //         $designation_id = !empty($this->input->post('designation_id')) ? $this->input->post('designation_id') : $user->designation_id;
-    //         // $password = !empty($this->input->post('password')) ? $this->input->post('password') : $user->password;
-    //         // $is_active = !empty($this->input->post('is_active')) ? $this->input->post('is_active') : $user->is_active;
-    //         $updated_at = $this->get_current_time();
-
-    //         $user_data = [
-    //             'name' => $name,
-    //             'email' => $email,
-    //             'contact_no' => $contact_no,
-    //             'user_type_id' => $user_type_id,
-    //             'designation_id' => $designation_id,
-    //             // 'password'=> $password,
-    //             // 'is_active'=> $is_active,
-    //             'updated_at' => $updated_at,
-    //         ];
-
-    //         // echo json_encode($user_data);
-    //         // exit;
-
-    //         $result = $this->admin_model->update_user($user->id, $user_data);
-
-    //         if ($result) {
-    //             echo json_encode(['success' => 1, "message" => "User Updated Successfully."]);
-    //             return;
-    //         } else {
-    //             $db_error = $this->db->error();
-    //             echo json_encode(['success' => 0, 'message' => $db_error['message']]);
-    //             return;
-    //         }
-    //     } else {
-    //         echo json_encode(['success' => 0, 'message' => "Email and Contact are already assigned"]);
-    //         return;
-    //     }
-    //     echo json_encode(['success' => 0, 'message' => "Something Went Wrong!"]);
-    // }
-
-    public function update_user()
+     public function update_user()
     {
         if ($this->input->method() !== 'post') {
             echo json_encode(['success' => 0, 'message' => 'Invalid HTTP method. Use POST method.']);
@@ -435,61 +296,193 @@ class Admin_services_panth extends CI_Controller
         $id = $this->input->post('user_id');
 
         if ($id == null) {
-            echo json_encode(['success' => 0, 'message' => 'Required User Id.']);
+            echo json_encode(['success' => 0, 'message' => 'Required Id as Params.']);
             return;
         }
 
         $user = $this->admin_model->get_user_by_id($id);
-
         $check = $this->db->query(
-            "SELECT *  FROM `users`  WHERE id =" . $id
+            "SELECT *  FROM `users`  WHERE email = '" . $this->input->post('email') . "' OR  contact_no = '" . $this->input->post('contact_no') . "' AND  id  !=" . $id
         )->row_array();
 
-        // echo json_encode($check);
-        // print_r($check);
+        $check = $this->db->query(
+            "SELECT * FROM `users` WHERE 
+                 ( email = '" . $this->input->post('email') . "'
+                 OR
+                 contact_no = '" . $this->input->post('contact_no') . "')
+                 AND id != '" . $id . "' AND deleted_at is NULL 
+            "
+        )->row_array();
+        // 
+
+        // echo json_encode($user);
+
         // exit; 
         if (empty($check)) {
 
-            $name = !empty($this->input->post('username')) ? $this->input->post('username') : $user->name;
-            $email = !empty($this->input->post('email')) ? $this->input->post('email') : $user->email;
-            $contact_no = !empty($this->input->post('contact_no')) ? $this->input->post('contact_no') : $user->contact_no;
-            $user_type_id = !empty($this->input->post('user_type_id')) ? $this->input->post('user_type_id') : $user->user_type_id;
-            $designation_id = !empty($this->input->post('designation_id')) ? $this->input->post('designation_id') : $user->designation_id;
-            // $password = !empty($this->input->post('password')) ? $this->input->post('password') : $user->password;
-            // $is_active = !empty($this->input->post('is_active')) ? $this->input->post('is_active') : $user->is_active;
+            $name = $this->input->post('name');
+            $email = $this->input->post('email');
+            $contact_no = $this->input->post('contact_no');
+            // $email = !empty($this->input->post('email')) ? $this->input->post('email') : $user->email;
+            // $contact_no = !empty($this->input->post('contact_no')) ? $this->input->post('contact_no') : $user->contact_no;
+
+            // $user = $this->admin_model->get_user_by_email($email);
+            // echo json_encode($user);
+            // echo json_encode(is_null($user->deleted_at));
+            // exit;
+            // if (!empty($check) && is_null($check->deleted_at)) {
+            //     echo json_encode(['success' => 0, 'message' => 'User Already Exists email.']);
+            //     return;
+            // }
+
+            // $user = $this->admin_model->get_user_by_contact_no($contact_no);
+            // echo json_encode($user);
+            // echo json_encode(is_null($user->deleted_at));
+            // exit;
+            // if (!empty($user) && is_null($user->deleted_at)) {
+            //     echo json_encode(['success' => 0, 'message' => 'User Already Exists. no']);
+            //     return;
+            // }
+
+            $this->load->helper('url');
+            $this->load->library('upload');
+
+            $config['upload_path'] = FCPATH . 'uploads/profile_images/';
+            $config['allowed_types'] = 'jpg|jpeg|png|gif';
+            $config['encrypt_name'] = FALSE;
+
+            $this->upload->initialize($config);
+
+            $profile_pic = '';
+
+            if (!empty($_FILES['profile_pic']['name'])) {
+                if (!$this->upload->do_upload('profile_pic')) {
+                    echo json_encode(['status' => false, 'message' => $this->upload->display_errors()]);
+                    return;
+                } else {
+                    $uploaded_data = $this->upload->data();
+                    $timestamp = $this->get_current_time();
+                    $new_name = $timestamp . '_' . $uploaded_data['file_name'];
+
+                    $old_path = $uploaded_data['full_path'];
+                    $new_path = $uploaded_data['file_path'] . $new_name;
+                    rename($old_path, $new_path);
+                    $profile_pic = $new_name;
+                }
+            }
+
+
+            $password = $this->input->post('password');
+
+            // if (empty($password)) {
+            //     echo json_encode(['success' => 0, 'message' => 'Both password fields are required.']);
+            //     return;
+            // }
+
+            // $password = md5($password);
+            $user_type_id = $this->input->post('user_type_id');
+            $designation_id = $this->input->post('designation_id');
+            if($designation_id == "null"){
+                $others = strtolower($this->input->post('others'));
+                $this->db->where('LOWER(designation)', $others);
+                $result = $this->db->get('designation')->result();
+                // echo json_encode($result);
+                // exit;
+                if(!empty($result)){
+                    echo json_encode(['success'=>0,'message'=> 'Designation already Exists!']);
+                    return;
+                }
+                $des_data = [
+                    'designation' => $this->input->post('others'),
+                    'created_at' => time(),
+                    'is_active' => 1
+                ];
+                
+                $this->db->insert('designation', $des_data);
+                $designation_id = $this->db->insert_id();
+                // echo $designation_id;
+                // exit;
+            }
+
             $updated_at = $this->get_current_time();
 
             $user_data = [
-                'name' => $name,
-                'email' => $email,
-                'contact_no' => $contact_no,
-                'user_type_id' => $user_type_id,
-                'designation_id' => $designation_id,
-                // 'password'=> $password,
+                'name' => $name ? $name : $user->name,
+                'email' => $email ? $email : $user->email,
+                'contact_no' => $contact_no ? $contact_no : $user->contact_no,
+                'password' => $password ? md5($password) : $user->password,
+                'user_type_id' => $user_type_id ? $user_type_id : $user->user_type_id,
+                'designation_id' => $designation_id ? $designation_id : $user->designation_id,
+                'profile_pic' => $profile_pic ? $profile_pic : null,
                 // 'is_active'=> $is_active,
                 'updated_at' => $updated_at,
             ];
 
+            // echo json_encode($user_type_id);
+            // echo json_encode($designation_id);
+            // exit();
+
+            // $updated_at = $this->get_current_time();
+
+            // $user_data = [
+            //     'name' => $name,
+            //     'email' => $email,
+            //     'contact_no' => $contact_no,
+            //     // 'user_type_id' => $user_type_id,
+            //     // 'designation_id' => $designation_id,
+            //     // 'password'=> $password,
+            //     // 'is_active'=> $is_active,
+            //     'updated_at' => $updated_at,
+            // ];
+
+            // echo json_encode($user_data);
+            // exit();
+            // $user_type_id = !empty($this->input->post('user_type_id')) ? $this->input->post('user_type_id') : $user->user_type_id;
+            // $designation_id = !empty($this->input->post('designation_id')) ? $this->input->post('designation_id') : $user->designation_id;
+            // $password = !empty($this->input->post('password')) ? $this->input->post('password') : $user->password;
+            // $is_active = !empty($this->input->post('is_active')) ? $this->input->post('is_active') : $user->is_active;
+
+
             // echo json_encode($user_data);
             // exit;
 
-            $result = $this->admin_model->update_user($user->id, $user_data);
+            // $result = $this->admin_model->update_user($user->id, $user_data)
+            $this->db->where('id', $id);
+            $result = $this->db->update('users', $user_data);
 
             if ($result) {
                 echo json_encode(['success' => 1, "message" => "User Updated Successfully."]);
                 return;
             } else {
+                // $db_error = $this->db->error();
+                // echo json_encode(['success' => 0, 'message' => $db_error['message']]);
+                // return;
+
                 $db_error = $this->db->error();
-                echo json_encode(['success' => 0, 'message' => $db_error['message']]);
-                return;
+                if (!empty($db_error['code'])) {
+                    if ($db_error['code'] == 1062) {
+                        // Duplicate entry
+                        echo json_encode([
+                            'success' => 0,
+                            'message' => 'User Already Exists.'
+                        ]);
+                    } else {
+                        // Other DB error
+                        echo json_encode([
+                            'success' => 0,
+                            'message' => 'Database error: ' . $db_error['message']
+                        ]);
+                    }
+                    return;
+                }
             }
         } else {
-            echo json_encode(['success' => 0, 'message' => "Email and Contact are already assigned"]);
+            echo json_encode(['success' => 0, 'message' => "Email or Contact are already assigned"]);
             return;
         }
         echo json_encode(['success' => 0, 'message' => "Something Went Wrong!"]);
     }
-
+    //Update User
 
     //Check User Is Amin
     public function isAdmin($id)
@@ -501,6 +494,8 @@ class Admin_services_panth extends CI_Controller
         $is_admin = $is_admin->type == 'admin' ? 1 : 0;
         return $is_admin;
     }
+    //Check User Is Amin
+
 
     //Delete user
     public function delete_user()
@@ -560,6 +555,47 @@ class Admin_services_panth extends CI_Controller
         }
     }
 
+    //Get Password
+    // public function get_user_password()
+    // {
+    //     $user_id = $this->input->post("user_id") ?? '';
+    //     $user = $this->db->get_where('users', ['id' => $user_id, 'deleted_at' => null])->row();
+
+    //     if (!empty($user)) {
+    //         echo json_encode([
+    //             'success' => 1,
+    //             'password' => $user->password
+    //         ]);
+    //         return;
+    //     } else {
+    //         echo json_encode([
+    //             'success' => 0,
+    //             'message' => 'User not found'
+    //         ]);
+    //         return;
+    //     }
+    // }
+
+    //Get User Counter
+    public function userTypeCounter()
+    {
+        $post = $this->input->post();
+        $admin_users = $this->db->get_where('users', array('user_type_id' => 1, 'deleted_at' => null))->result_array();
+        $admin_count = count($admin_users);
+
+        $staff_users = $this->db->get_where('users', array('user_type_id' => 2, 'deleted_at' => null))->result_array();
+        $staff_count = count($staff_users);
+
+        $response['success'] = 1;
+        $response['message'] = 'User Type Couters ';
+
+        $response['data']['admin_count'] = $admin_count;
+        $response['data']['staff_count'] = $staff_count;
+        $response['data']['total'] = (int) $admin_count + (int) $staff_count;
+
+        echo json_encode($response);
+    }
+
     // public function get_user_by_id($id = null) {
 
     // }
@@ -598,8 +634,8 @@ class Admin_services_panth extends CI_Controller
         // echo json_encode($form);
         // echo json_encode(is_null($form->deleted_at));
         // exit;
-        if(!empty($form) && is_null($form->deleted_at)){
-            echo json_encode(['success' => 0,'message' => 'Form name already exists ' . $form_title]);
+        if (!empty($form) && is_null($form->deleted_at)) {
+            echo json_encode(['success' => 0, 'message' => 'Form name already exists ' . $form_title]);
             return;
         }
 
@@ -638,18 +674,20 @@ class Admin_services_panth extends CI_Controller
         }
 
         $search = $this->input->post('search');
+        $is_active = $this->input->post('status');
         $page = (int) $this->input->post('page');
         $limit = (int) $this->input->post('limit');
 
-        if ($page < 1)
-            $page = 1;
-        if ($limit < 1)
-            $limit = 10;
+        // echo json_encode($is_active != "null");
+        // exit;
 
+        $limit = $limit > 0 ? $limit : 10;
+        $page = $page > 0 ? $page : 1;
         $offset = ($page - 1) * $limit;
 
-        $results = $this->Form_model->get_forms($search, $limit, $offset);
-        $total = $this->Form_model->count_forms($search);
+        $results = $this->Form_model->get_forms($search, $limit, $offset, $is_active);
+        $total = $this->db->query('SELECT count(*) as total FROM forms WHERE deleted_at is NULL')->row();
+        $total = $total->total;
 
         if (!empty($results)) {
             $results = array_filter($results, function ($result) {
@@ -657,24 +695,24 @@ class Admin_services_panth extends CI_Controller
             });
 
             $results = array_values($results);
+
             foreach ($results as $result) {
-                if (!empty($result->created_at)) {
-                    $result->created_at_formated = date('d F, Y', $result->created_at);
-                } else {
-                    $result->created_at_formated = null;
-                }
+                $result->created_at_formated = !empty($result->created_at)
+                    ? date('d F, Y', $result->created_at)
+                    : null;
 
-                if (!empty($result->others)) {
-                    $decoded_others = json_decode($result->others, true);
+                $result->last_updated_at = !empty($result->updated_at)
+                    ? date('d F, Y', $result->updated_at)
+                    : null;
 
-                    if (json_last_error() === JSON_ERROR_NONE) {
-                        $result->others = $decoded_others;
-                    } else {
-                        $result->others = [];
-                    }
-                } else {
+                $result->others = json_decode($result->others ?? '{}', true);
+                if (json_last_error() !== JSON_ERROR_NONE) {
                     $result->others = [];
                 }
+
+                $query = $this->db->query('SELECT COUNT(*) as total FROM inquiries WHERE form_id = ?', [$result->id]);
+                $row = $query->row();
+                $result->total_inquiries = $row->total;
             }
 
             echo json_encode([
@@ -683,11 +721,11 @@ class Admin_services_panth extends CI_Controller
                 'list' => $results,
                 'total_records' => $total
             ]);
-            return;
+        } else {
+            echo json_encode(['success' => 0, 'message' => 'No forms found.', 'list' => [], 'total_records' => 0]);
         }
-
-        echo json_encode(['success' => 0, 'message' => 'No forms found.', 'list' => [], 'total' => 0]);
     }
+
 
     public function get_form_by_id()
     {
@@ -733,6 +771,39 @@ class Admin_services_panth extends CI_Controller
         }
 
         echo json_encode(['success' => 0, 'message' => "No Forms Found!"]);
+    }
+
+    public function change_form_status()
+    {
+        if ($this->input->method() !== 'post') {
+            echo json_encode(['success' => 0, 'message' => 'Invalid HTTP method. Use POST method.']);
+            return;
+        }
+
+        $form_id = $this->input->post('form_id');
+        $is_active = $this->input->post('is_active');
+
+        if (empty($this->Form_model->get_form_by_id($form_id))) {
+            echo json_encode(['success' => 0, 'message' => 'Form not found!']);
+            return;
+        }
+
+        $form_data = [
+            'is_active' => $is_active
+        ];
+
+        // echo json_encode([$form_id, $form_data]);
+        // exit;
+
+        $this->db->where('id', $form_id);
+        $result = $this->db->update('forms', $form_data);
+
+        if ($result) {
+            echo json_encode(["success" => 1, 'message' => 'Updated Status Successfully.']);
+            return;
+        }
+        echo json_encode(["success" => 0, 'message' => 'Status is not Updated.']);
+        return;
     }
 
     // public function get_form_others($id = null)
@@ -874,4 +945,66 @@ class Admin_services_panth extends CI_Controller
             return;
         }
     }
+
+
+    //Dashboard Build
+
+    //All Counters
+    public function get_counters()
+    {
+        if ($this->input->method() !== 'post') {
+            echo json_encode(['success' => 0, 'message' => 'Invalid HTTP method. Use POST method.']);
+            return;
+        }
+
+        // echo'HIHIHIHIH';
+        // exit();
+
+        $form_counts = $this->db->query("SELECT count(*) as total FROM forms WHERE deleted_at is NULL")->row();
+        $form_counts = $form_counts->total;
+
+
+        $user_counts = $this->db->query("SELECT count(*) as total FROM users WHERE deleted_at is NULL")->row();
+        $user_counts = $user_counts->total;
+
+        // echo $user_counts;
+        // exit();
+
+        $inquiry_counts = $this->db->query("SELECT count(*) as total FROM inquiries ")->row();
+        $inquiry_counts = $inquiry_counts->total;
+
+        // echo $inquiry_counts;
+        // exit();
+        $counter_list = [
+            (object) ['counter' => 'Forms', 'value' => $form_counts],
+            // (object) ['counter' => 'Users', 'value' => $user_counts],
+            // (object) ['counter' => 'Inquiries', 'value' => $inquiry_counts]
+        ];
+
+        echo json_encode(['success' => 1, 'list' => $counter_list, 'total_records' => count($counter_list)]);
+        return;
+
+    }
+
+    public function modules_list() {
+        $result = $this->db->get('modules')->result();
+        if(!empty($result)){
+            echo json_encode(['success'=>1, 'list'=> $result]);
+            return;
+        }
+    }
+
+    public function encryption_trial() {
+        $this->load->library('encryption');
+        
+        $email = "test@example.com";
+        $ciphertext = $this->encryption->encrypt($email);
+        
+        // header('Content-Type: text/plain');
+        echo $ciphertext;
+        echo '</br>';
+        echo $this->encryption->decrypt($ciphertext);
+        exit;
+    }
+
 }

@@ -3,137 +3,98 @@
   <div class="form-container content_wrapper">
     <form class="create-form" #FormData="ngForm" (ngSubmit)="submitForm(FormData)" novalidate>
       <div class="input-field form-title">
-          <div class="">
-          <label class="title" for="label" [ngClass]="{'error-label': title.invalid && (title.dirty || title.touched)}" >Form Title<sup>*</sup> </label>
-            <input
-              class="label"
-              id="label"
-              name="title"
-              type="text"
-              [(ngModel)]="formModel.title"
-              #title="ngModel"
-              required
-              placeholder="Enter Title"
-              [class.invalid]="
+        <div class="">
+          <label class="title" for="label"
+            [ngClass]="{'error-label': title.invalid && (title.dirty || title.touched)}">Form Title<sup>*</sup> </label>
+          <input class="label" id="label" name="title" type="text" [(ngModel)]="formModel.title" #title="ngModel"
+            required placeholder="Enter Title" [class.invalid]="
               title.invalid && (title.dirty || title.touched)
-              "
-            />
+              " />
           <!-- <label class="title" for="label" [ngClass]="{'error-label': title.invalid && (title.dirty || title.touched)}" >Title<sup>*</sup> </label> -->
-            <div
-              class="error"
-              *ngIf="title.invalid && (title.dirty || title.touched)"
-            >
-              <span *ngIf="title.errors?.required" class="font-13"
-                >Title is required.</span
-              >
+          <div class="error" *ngIf="title.invalid && (title.dirty || title.touched)">
+            <span *ngIf="title.errors?.required" class="font-13">Title is required.</span>
           </div>
-          </div>
+        </div>
       </div>
 
-      <div class="dynamic_input_wrapper"  *ngFor="let field of formModel.addedFieldArray; let i = index; trackBy: trackByFn" [ngClass]="{'active' : field.label_type == 'checkbox' || field.label_type == 'radio'}">
-          <div class="input-field">
-            <div class="">
-              <label for="label-{{i}}" [ngClass]="{'error-label': labelInput.invalid && (labelInput.dirty || labelInput.touched)}" >Field Name<sup>*</sup> </label>
-              <input
-                  class="label"
-                  id="label-{{i}}"
-                  name="label-{{i}}"
-                  placeholder="Enter Field"
-                  type="text"
-                  [(ngModel)]="formModel.addedFieldArray[i].label"
-                  #labelInput="ngModel"
-                  required
-                  [class.invalid]="
+      <div class="dynamic_input_wrapper"
+        *ngFor="let field of formModel.addedFieldArray; let i = index; trackBy: trackByFn"
+        [ngClass]="{'active' : field.label_type == 'checkbox' || field.label_type == 'radio'}">
+        <div class="input-field">
+          <div class="">
+            <label for="label-{{i}}"
+              [ngClass]="{'error-label': labelInput.invalid && (labelInput.dirty || labelInput.touched)}">Field
+              Name<sup>*</sup> </label>
+            <input class="label" id="label-{{i}}" name="label-{{i}}" placeholder="Enter Field" type="text"
+              [(ngModel)]="formModel.addedFieldArray[i].label" #labelInput="ngModel" required [class.invalid]="
                   labelInput.invalid && (labelInput.dirty || labelInput.touched)
-                  "
-              />
-              <!-- <label for="label-{{i}}" [ngClass]="{'error-label': labelInput.invalid && (labelInput.dirty || labelInput.touched)}" >Field Name<sup>*</sup> </label> -->
-              <div
-                class="error"
-                *ngIf="labelInput.invalid && (labelInput.dirty || labelInput.touched)"
-              >
-                <span *ngIf="labelInput.errors?.required" class="font-13"
-                  >Field is required.</span
-                >
-              </div>
+                  " />
+            <!-- <label for="label-{{i}}" [ngClass]="{'error-label': labelInput.invalid && (labelInput.dirty || labelInput.touched)}" >Field Name<sup>*</sup> </label> -->
+            <div class="error" *ngIf="labelInput.invalid && (labelInput.dirty || labelInput.touched)">
+              <span *ngIf="labelInput.errors?.required" class="font-13">Field is required.</span>
             </div>
-      
-            <div>
-            <label for="label_type" [ngClass]="{'error-label': labelTypeInput.invalid && (labelTypeInput.dirty || labelTypeInput.touched)}" >Field Type<sup>*</sup> </label>
-              <select
-                  id="label_type-{{i}}"
-                  name="label_type-{{i}}"
-                  placeholder="Enter Option"  
-                  [(ngModel)]="formModel.addedFieldArray[i].label_type"
-                  (change)="onTypeSelect(i)"
-                  #labelTypeInput="ngModel"
-                  required
-                  [class.invalid]="labelTypeInput.invalid && (labelTypeInput.dirty || labelTypeInput.touched)"
-                  class="capitalize"
-              >
+          </div>
+
+          <div>
+            <label for="label_type"
+              [ngClass]="{'error-label': labelTypeInput.invalid && (labelTypeInput.dirty || labelTypeInput.touched)}">Field
+              Type<sup>*</sup> </label>
+            <select id="label_type-{{i}}" name="label_type-{{i}}" placeholder="Enter Option"
+              [(ngModel)]="formModel.addedFieldArray[i].label_type" (change)="onTypeSelect(i)" #labelTypeInput="ngModel"
+              required [class.invalid]="labelTypeInput.invalid && (labelTypeInput.dirty || labelTypeInput.touched)"
+              class="capitalize">
               <option class="capitalize" value="" selected disabled>Select Field Type</option>
               <option class="capitalize" *ngFor="let type of inputTypes" [value]="type">{{ type }}</option>
             </select>
             <!-- <label for="label_type" [ngClass]="{'error-label': labelTypeInput.invalid && (labelTypeInput.dirty || labelTypeInput.touched)}" >Type<sup>*</sup> </label> -->
-              <div
-                class="error"
-                *ngIf="labelTypeInput.invalid && (labelTypeInput.dirty || labelTypeInput.touched)"
-              >
-                <span *ngIf="labelTypeInput.errors?.required" class="font-13"
-                  >Type is required.</span
-                >
-              </div>
-            </div>
-      
-            <div>
-                <label class="hidden" aria-hidden="true">Buttons: </label>
-                <div class="btn_container">
-                  <button *ngIf="i+1 == formModel.addedFieldArray.length" type="button" class="field_btn add_input material-symbols-outlined" (click)="addField()"> add </button>
-                  <button type="button" class="field_btn remove_input material-symbols-outlined" [disabled]="formModel.addedFieldArray.length<=1" (click)="removeField(i)">remove</button>
-                </div>
+            <div class="error" *ngIf="labelTypeInput.invalid && (labelTypeInput.dirty || labelTypeInput.touched)">
+              <span *ngIf="labelTypeInput.errors?.required" class="font-13">Type is required.</span>
             </div>
           </div>
-      
-          <div class="input-field options" *ngFor="let option of formModel.addedFieldArray[i].options; let iOption = index; trackBy: trackByFn">
-              <div>
-                <!-- <h2>{{formModel.addedFieldArray[i].label}}</h2> -->
-                  <label for="option-{{i}}-{{iOption}}" [ngClass]="{'error-label': optionInput.invalid && (optionInput.dirty || optionInput.touched)}">Add Option<sup>*</sup> </label>
-                  <input
-                  class="label"
-                  id="option-{{i}}-{{iOption}}"
-                  name="option-{{i}}-{{iOption}}"
-                  type="text"
-                  [(ngModel)]="formModel.addedFieldArray[i].options[iOption]"
-                  #optionInput="ngModel"
-                  required
-                  [class.invalid]="optionInput.invalid && (optionInput.dirty || optionInput.touched)"
-                  />
-                  <!-- <label for="option-{{i}}-{{iOption}}" [ngClass]="{'error-label': optionInput.invalid && (optionInput.dirty || optionInput.touched)}">Option<sup>*</sup> </label> -->
-                  <div
-                  class="error"
-                  *ngIf="optionInput.invalid && (optionInput.dirty || optionInput.touched)"
-                >
-                  <span *ngIf="optionInput.errors?.required" class="font-13"
-                    >Field is required.</span
-                  >
-                </div>
-              </div>
 
-              <div>
-                  <label class="hidden" aria-hidden="true">Buttons: </label>
-                  <div class="btn_container">
-                  <button *ngIf="iOption+1 == formModel.addedFieldArray[i].options.length" type="button" class="field_btn add_input material-symbols-outlined" (click)="addOption(i)"> add </button>
-                  <button type="button" class="field_btn remove_input material-symbols-outlined" 
-                          [disabled]="formModel.addedFieldArray[i].options.length <= 1" 
-                          (click)="removeOption(i, iOption)">remove</button>
-                  </div>
-              </div>
+          <div>
+            <label class="hidden" aria-hidden="true">Buttons: </label>
+            <div class="btn_container">
+              <button *ngIf="i+1 == formModel.addedFieldArray.length" type="button"
+                class="field_btn add_input material-symbols-outlined" (click)="addField()"> add </button>
+              <button type="button" class="field_btn remove_input material-symbols-outlined"
+                [disabled]="formModel.addedFieldArray.length<=1" (click)="removeField(i)">remove</button>
+            </div>
           </div>
+        </div>
+
+        <div class="input-field options"
+          *ngFor="let option of formModel.addedFieldArray[i].options; let iOption = index; trackBy: trackByFn">
+          <div>
+            <!-- <h2>{{formModel.addedFieldArray[i].label}}</h2> -->
+            <label for="option-{{i}}-{{iOption}}"
+              [ngClass]="{'error-label': optionInput.invalid && (optionInput.dirty || optionInput.touched)}">Add
+              Option<sup>*</sup> </label>
+            <input class="label" id="option-{{i}}-{{iOption}}" name="option-{{i}}-{{iOption}}" type="text"
+              [(ngModel)]="formModel.addedFieldArray[i].options[iOption]" #optionInput="ngModel" required
+              [class.invalid]="optionInput.invalid && (optionInput.dirty || optionInput.touched)" />
+            <!-- <label for="option-{{i}}-{{iOption}}" [ngClass]="{'error-label': optionInput.invalid && (optionInput.dirty || optionInput.touched)}">Option<sup>*</sup> </label> -->
+            <div class="error" *ngIf="optionInput.invalid && (optionInput.dirty || optionInput.touched)">
+              <span *ngIf="optionInput.errors?.required" class="font-13">Field is required.</span>
+            </div>
+          </div>
+
+          <div>
+            <label class="hidden" aria-hidden="true">Buttons: </label>
+            <div class="btn_container">
+              <button *ngIf="iOption+1 == formModel.addedFieldArray[i].options.length" type="button"
+                class="field_btn add_input material-symbols-outlined" (click)="addOption(i)"> add </button>
+              <button type="button" class="field_btn remove_input material-symbols-outlined"
+                [disabled]="formModel.addedFieldArray[i].options.length <= 1"
+                (click)="removeOption(i, iOption)">remove</button>
+            </div>
+          </div>
+        </div>
       </div>
-      
+
       <button type="submit" [disabled]="FormData.invalid || isLoading">
         <!-- {{ isLoading ? "Creating..." : "Create" }} -->
-          {{formBtn}}
+        {{formBtn}}
       </button>
 
       <p class="error" *ngIf="errorMessage">{{ errorMessage }}</p>

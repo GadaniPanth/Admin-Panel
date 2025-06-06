@@ -1,2 +1,329 @@
-<!-- <router-outlet></router-outlet> -->
-<h2 style="font-size: 1.1rem;">Dashboard</h2>
+<div class="user-wrapper outlet_wrapper" style="display: none;">
+    <div class="inner-flex inner-flex-medium">
+        <!-- <h2 class="heading_text tab_name font-18"> Forms</h2>
+        <div class="couters-container row-flex first-container" *ngIf="countersList">
+            <div class="counter-block inner-flex" [routerLink]="['/', counterUrl[i]]"
+                *ngFor="let item of countersList; let i = index"
+                [ngStyle]="{'background': counterBg[i], 'color': counterColor[i]}">
+                <div class="counter-img">
+                    <img src="assets/images/{{counterImg[i]}}" alt="">
+                </div>
+                <div class="counter-header">
+                    <h2 class="text-center font-18">{{countersList[i].counter}}</h2>
+                </div>
+                <div class="counter">
+                    <h2 class="text-center font-18">{{countersList[i].value}}</h2>
+                </div>
+            </div> 
+        </div>-->
+        <h2 class="heading_text tab_name font-18"> Forms</h2>
+        <div class="couters-container row-flex">
+            <div class="counter-block form-conatiner inner-flex complete-bg" routerLink="/list-form">
+                <div class="counter-img">
+                    <img src="assets/images/exam.png" alt="">
+                </div>
+                <div class="counter-header">
+                    <h2 class="text-center font-18">Forms</h2>
+                </div>
+                <div class="counter">
+                    <!-- <h2 class="text-center font-18">{{countersList[0].value}}</h2> -->
+                    <h2 class="text-center font-18">{{form_counters.total}}</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- <div class="row-flex alc inquiry-conatiner"> -->
+    <div class="inner-flex inner-flex-medium inquiry-conatiner">
+        <h2 class="heading_text tab_name font-18"> Inquiries</h2>
+        <div class="couters-container row-flex">
+            <div class="counter-block inner-flex total-bg" routerLink="/inquiry">
+                <div class="counter-img-inquiry text-center font-22">
+                    <span class="material-symbols-outlined" style="font-size: 35px;">
+                        apps
+                    </span>
+                </div>
+                <div class="counter-header">
+                    <h2 class="text-center font-18">Total Inquiries</h2>
+                </div>
+                <div class="counter">
+                    <h2 class="text-center font-18">{{inquiry_ststus_counter.total}}</h2>
+                </div>
+            </div>
+            <div class="counter-block inner-flex pending-bg" routerLink="/inquiry" [queryParams]="{ status_id: 1 }">
+                <div class="counter-img-inquiry text-center font-22">
+                    <span class="material-symbols-outlined" style="font-size: 35px;">
+                        hourglass_empty
+                    </span>
+                </div>
+                <div class="counter-header">
+                    <h2 class="text-center font-18">Pending Inquiries</h2>
+                </div>
+                <div class="counter">
+                    <h2 class="text-center font-18">{{inquiry_ststus_counter.pending_count}}</h2>
+                </div>
+            </div>
+            <div class="counter-block inner-flex in-progress-bg" routerLink="/inquiry" [queryParams]="{ status_id: 2 }">
+                <div class="counter-img-inquiry text-center font-22">
+                    <span class="material-symbols-outlined" style="font-size: 35px;">
+                        clock_loader_60
+                    </span>
+                </div>
+                <div class="counter-header">
+                    <h2 class="text-center font-18">In Progress Inquiries</h2>
+                </div>
+                <div class="counter">
+                    <h2 class="text-center font-18">{{inquiry_ststus_counter.inprogress_count}}</h2>
+                </div>
+            </div>
+            <div class="counter-block inner-flex on-hold-bg" routerLink="/inquiry" [queryParams]="{ status_id: 3 }">
+                <div class="counter-img-inquiry text-center font-22">
+                    <span class="material-symbols-outlined" style="font-size: 35px;">
+                        pause_circle
+                    </span>
+                </div>
+                <div class="counter-header">
+                    <h2 class="text-center font-18">On Hold Inquiries</h2>
+                </div>
+                <div class="counter">
+                    <h2 class="text-center font-18">{{inquiry_ststus_counter.onhold_count}}</h2>
+                </div>
+            </div>
+            <div class="counter-block inner-flex complete-bg" routerLink="/inquiry" [queryParams]="{ status_id: 4 }">
+                <div class="counter-img-inquiry text-center font-22">
+                    <span class="material-symbols-outlined" style="font-size: 35px;">
+                        task_alt
+                    </span>
+                </div>
+                <div class="counter-header">
+                    <h2 class="text-center font-18">Completed Inquiries</h2>
+                </div>
+                <div class="counter">
+                    <h2 class="text-center font-18">{{inquiry_ststus_counter.complete_count}}</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="inner-flex inner-flex-medium inquiry-conatiner">
+        <h2 class="heading_text tab_name font-18">Users</h2>
+        <div class="couters-container row-flex">
+            <div class="counter-block inner-flex total-bg" routerLink="/users">
+                <div class="counter-img-inquiry text-center font-22">
+                    <span class="material-symbols-outlined" style="font-size: 35px;">
+                        groups
+                    </span>
+                </div>
+                <div class="counter-header">
+                    <h2 class="text-center font-18">Total Users</h2>
+                </div>
+                <div class="counter">
+                    <h2 class="text-center font-18">{{user_type_counter.total}}</h2>
+                </div>
+            </div>
+            <div class="counter-block inner-flex pending-bg" routerLink="/users" [queryParams]="{ user_type_id: 1 }">
+                <div class="counter-img-inquiry text-center font-22">
+                    <span class="material-symbols-outlined" style="font-size: 35px;">
+                        shield_person
+                    </span>
+                </div>
+                <div class="counter-header">
+                    <h2 class="text-center font-18">Admin Users</h2>
+                </div>
+                <div class="counter">
+                    <h2 class="text-center font-18">{{user_type_counter.admin_count}}</h2>
+                </div>
+            </div>
+            <div class="counter-block inner-flex in-progress-bg" routerLink="/users"
+                [queryParams]="{ user_type_id: 2 }">
+                <div class="counter-img-inquiry text-center font-22">
+                    <span class="material-symbols-outlined" style="font-size: 35px;">
+                        badge
+                    </span>
+                </div>
+                <div class="counter-header">
+                    <h2 class="text-center font-18">Staff Users</h2>
+                </div>
+                <div class="counter">
+                    <h2 class="text-center font-18">{{user_type_counter.staff_count}}</h2>
+                </div>
+            </div>
+        </div>
+        <!-- </div> -->
+        <div class="inner-flex inner-flex-small">
+            <div>
+                <h2 class="font-18">Inquiry</h2>
+            </div>
+            <!-- <app-inquiry-list></app-inquiry-list> -->
+        </div>
+    </div>
+
+</div>
+
+<!-- display none above -->
+
+<!-- add -->
+<div class="user-wrapper outlet_wrapper inner-flex inner-flex-medium">
+    <div class="grid-col-5">
+
+        <!-- form -->
+        <div class="couters-container row-flex">
+            <div class="counter-block form-conatiner inner-flex complete-bg" routerLink="/list-form">
+                <div class="counter-img">
+                    <img src="assets/images/exam.png" alt="">
+                </div>
+                <div class="counter-header">
+                    <h2 class="text-center font-18">Forms</h2>
+                </div>
+                <div class="counter">
+                    <!-- <h2 class="text-center font-18">{{countersList[0].value}}</h2> -->
+                    <h2 class="text-center font-18">{{form_counters.total}}</h2>
+                </div>
+            </div>
+        </div>
+
+        <!-- inquiry -->
+        <div class="counter-block inner-flex total-bg" routerLink="/inquiry" style="color: #5d87ff;">
+            <div class="counter-img-inquiry text-center font-22">
+                <span class="material-symbols-outlined" style="font-size: 35px;">
+                    apps
+                </span>
+            </div>
+            <div class="counter-header">
+                <h2 class="text-center font-18">Total Inquiries</h2>
+            </div>
+            <div class="counter">
+                <h2 class="text-center font-18">{{inquiry_ststus_counter.total}}</h2>
+            </div>
+        </div>
+
+        <div class="counter-block inner-flex pending-bg" routerLink="/inquiry" [queryParams]="{ status_id: 1 }"
+            style="color: #b99049;">
+            <div class="counter-img-inquiry text-center font-22">
+                <span class="material-symbols-outlined" style="font-size: 35px;">
+                    hourglass_empty
+                </span>
+            </div>
+            <div class="counter-header">
+                <h2 class="text-center font-18">Pending Inquiries</h2>
+            </div>
+            <div class="counter">
+                <h2 class="text-center font-18">{{inquiry_ststus_counter.pending_count}}</h2>
+            </div>
+        </div>
+
+        <div class="counter-block inner-flex in-progress-bg" routerLink="/inquiry" [queryParams]="{ status_id: 2 }"
+            style="color: #3b7fa3;">
+            <div class="counter-img-inquiry text-center font-22">
+                <span class="material-symbols-outlined" style="font-size: 35px;">
+                    clock_loader_60
+                </span>
+            </div>
+            <div class="counter-header">
+                <h2 class="text-center font-18">In Progress Inquiries</h2>
+            </div>
+            <div class="counter">
+                <h2 class="text-center font-18">{{inquiry_ststus_counter.inprogress_count}}</h2>
+            </div>
+        </div>
+
+        <div class="counter-block inner-flex on-hold-bg" routerLink="/inquiry" [queryParams]="{ status_id: 3 }"
+            style="color: #fa896b;">
+            <div class="counter-img-inquiry text-center font-22">
+                <span class="material-symbols-outlined" style="font-size: 35px;">
+                    pause_circle
+                </span>
+            </div>
+            <div class="counter-header">
+                <h2 class="text-center font-18">On Hold Inquiries</h2>
+            </div>
+            <div class="counter">
+                <h2 class="text-center font-18">{{inquiry_ststus_counter.onhold_count}}</h2>
+            </div>
+        </div>
+
+        <div class="counter-block inner-flex complete-bg" routerLink="/inquiry" [queryParams]="{ status_id: 4 }"
+            style="color: #13deb9;">
+            <div class="counter-img-inquiry text-center font-22">
+                <span class="material-symbols-outlined" style="font-size: 35px;">
+                    task_alt
+                </span>
+            </div>
+            <div class="counter-header">
+                <h2 class="text-center font-18">Completed Inquiries</h2>
+            </div>
+            <div class="counter">
+                <h2 class="text-center font-18">{{inquiry_ststus_counter.complete_count}}</h2>
+            </div>
+        </div>
+
+        <!-- user -->
+
+        <div class="counter-block inner-flex total-bg" routerLink="/users" style="color: #5d87ff;">
+            <div class="counter-img-inquiry text-center font-22">
+                <span class="material-symbols-outlined" style="font-size: 35px;">
+                    groups
+                </span>
+            </div>
+            <div class="counter-header">
+                <h2 class="text-center font-18">Total Users</h2>
+            </div>
+            <div class="counter">
+                <h2 class="text-center font-18">{{user_type_counter.total}}</h2>
+            </div>
+        </div>
+
+        <div class="counter-block inner-flex pending-bg" routerLink="/users" [queryParams]="{ user_type_id: 1 }"
+            style="color: #b99049;">
+            <div class="counter-img-inquiry text-center font-22">
+                <span class="material-symbols-outlined" style="font-size: 35px;">
+                    shield_person
+                </span>
+            </div>
+            <div class="counter-header">
+                <h2 class="text-center font-18">Admin Users</h2>
+            </div>
+            <div class="counter">
+                <h2 class="text-center font-18">{{user_type_counter.admin_count}}</h2>
+            </div>
+        </div>
+
+        <div class="counter-block inner-flex in-progress-bg" routerLink="/users" [queryParams]="{ user_type_id: 2 }"
+            style="color: #3b7fa3;">
+            <div class="counter-img-inquiry text-center font-22">
+                <span class="material-symbols-outlined" style="font-size: 35px;">
+                    badge
+                </span>
+            </div>
+            <div class="counter-header">
+                <h2 class="text-center font-18">Staff Users</h2>
+            </div>
+            <div class="counter">
+                <h2 class="text-center font-18">{{user_type_counter.staff_count}}</h2>
+            </div>
+        </div>
+
+    </div>
+    <div class="inner-flex inner-flex-small">
+        <div>
+            <h2 class="font-18">Inquiries</h2>
+        </div>
+        <app-inquiry-list></app-inquiry-list>
+    </div>
+</div>
+
+<!-- <div class="row-flex jsb page-header relative">
+    <div class="page-header-text">
+        <h2 class="heading_text tab_name font-18 capitalize">Dashboard</h2> -->
+<!-- <ul class="breadcrumb row-flex"> -->
+<!-- <div class="breadcrumb row-flex" style="align-items: center;">Dashboard </div> -->
+<!-- </ul> -->
+<!-- </div>
+    <div class="btn_container row-flex jsb"> -->
+<!-- <button class="cursor_pointer font-16" [routerLink]="'/create-form'">
+        Add Form
+        </button>
+        <button class="cursor_pointer font-16" (click)="exportAsXLSX()">
+            Export Form
+        </button> -->
+<!-- </div>
+    <img class="header-image" src="assets/images/Chat.png" alt="">
+</div> -->

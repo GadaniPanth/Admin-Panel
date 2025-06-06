@@ -1,14 +1,27 @@
 <div class="user-wrapper outlet_wrapper">
-    <div class="row-flex jsb">
-        <h2 class="heading_text tab_name font-18 capitalize">form</h2>
-        <button class="cursor_pointer font-16" [routerLink]="'/create-form'">
+    <div class="row-flex jsb page-header relative">
+        <div class="page-header-text">
+            <h2 class="heading_text tab_name font-18 capitalize">Forms ({{formCount}})</h2>
+            <!-- <ul class="breadcrumb row-flex"> -->
+            <div class="breadcrumb row-flex" style="align-items: center;"><a routerLink="/dashboard">Dashboard</a> <img
+                    style="width: 8px; height: 8px; margin: 0 .8rem;" src="assets/images/circle-fill.svg" /> Forms
+            </div>
+            <!-- </ul> -->
+        </div>
+        <!-- <div class="btn_container row-flex jsb">
+            <button class="cursor_pointer font-16" [routerLink]="'/create-form'">
             Add Form
-        </button>
+            </button>
+            <button class="cursor_pointer font-16" (click)="exportAsXLSX()">
+                Export Form
+            </button>
+        </div> -->
+        <img class="header-image" src="assets/images/Chat.png" alt="">
     </div>
     <div class="table-container content_wrapper inner-flex inner-flex-medium">
 
         <div class="filters_container">
-            <div class="left">
+            <div class="left row-flex">
                 <div class="relative" style="width: 18rem;">
                     <input type="text" class="form-control" placeholder="Search" name="search" id="search"
                         [(ngModel)]="formObj.search" (ngModelChange)="onSearchChange()" #search="ngModel">
@@ -17,7 +30,7 @@
                     </div> -->
                 </div>
             </div>
-            <!-- <div class="right"> -->
+            <div class="right">
 
                 <!-- <div class="" style="width: 10rem;">
                     <ng-select class="custom-ng-select" name="status" id="status" [(ngModel)]="formObj.status"
@@ -46,9 +59,29 @@
                             </ng-option>
                         </ng-select>
                     </div>
-                </div>
+                </div>  -->
 
-            </div> -->
+                <div style="width: 16rem;">
+                    <div class="formInput relative">
+                        <ng-select placeholder="Select Status" [searchable]="true" [(ngModel)]="formObj.status"
+                            id="type" name="type" (change)="onFilter();">
+                            <ng-option value="{{item.status}}" *ngFor="let item of form_list_type">
+                                {{item.type}}
+                            </ng-option>
+                        </ng-select>
+                    </div>
+                </div>
+                <div class="btn_container row-flex jsb">
+                    <button class="cursor_pointer font-16" [routerLink]="'/create-form'"
+                        *ngIf="permissions.includes('can_add')">
+                        Add
+                    </button>
+                    <button class="cursor_pointer font-16" (click)="exportAsXLSX()"
+                        *ngIf="permissions.includes('can_export')">
+                        Export
+                    </button>
+                </div>
+            </div>
 
 
         </div>
@@ -56,41 +89,46 @@
         <table>
             <thead>
                 <tr>
-                    <th class="w_10">#</th>
-                    <th class="w_40">Name</th>
+                    <th class="w_5">#</th>
+                    <th class="w_20 no_center">Name</th>
+                    <th class="w_10">Inquiry Counts</th>
                     <!-- <th class="w_15">Email</th>
                     <th class="w_15">Contact No</th>
                     <th class="w_15">Message</th>
                     <th class="w_15">Type</th> -->
-                    <!-- <th>Active</th> -->
+                    <th class="w_10">Date</th>
+                    <th class="w_5">Active</th>
                     <!-- <th class="w_10 ">Status</th> -->
-                    <th class="w_30">Date</th>
-                    <th class="w_20 text-center">Actions</th>
+                    <th class="w_10 text-center"
+                        *ngIf="permissions.includes('can_edit') &&  permissions.includes('can_delete')">Actions</th>
                 </tr>
             </thead>
             <tbody *ngIf="form_List && form_List.length > 0 && !isLoading">
                 <tr *ngFor="let data of form_List; let i = index">
-                    <td class="w_5">{{ i + 1 }}</td>
-                    <td class="capitalize w_10">{{ data.form_title }}</td>
+                    <td class="">{{ (formObj.page - 1) * formObj.limit + i + 1 }}</td>
+                    <td class="capitalize no_center">{{ data.form_title }}</td>
                     <!-- <td class="capitalize w_20"
                         [ngClass]="{'text-green': data.status == 'Open','text-red': data.status == 'Closed'}">{{
                         data.status }}</td> -->
+                    <td class="capitalize">{{ data.total_inquiries }}</td>
                     <td class="capitalize">{{ data.created_at_formated }}</td>
-                    <!-- <td>
+                    <td class="text-center">
                         <div class="">
                             <span class="material-symbols-outlined"
-                                title="{{ isToggled ? 'Mark As Inactive' : 'Mark As Active' }}" (click)="toggle()"
-                                [ngClass]="isToggled ? 'toggle_on' : 'toggle_off'"
+                                title="{{ data.is_active == 1 ? 'Mark As active' : 'Mark As Inactive' }}"
+                                (click)="toggle(data.id , data.is_active)"
+                                [ngClass]="data.is_active == 1 ? 'toggle_on' : 'toggle_off'"
                                 style="cursor: pointer; font-size: 32px">
-                                {{ isToggled ? "toggle_on" : "toggle_off" }}
+                                {{ data.is_active == 1 ? "toggle_on" : "toggle_off" }}
                             </span>
                         </div>
-                    </td> -->
-                    <td>
+                    </td>
+                    <td *ngIf="permissions.includes('can_edit') && permissions.includes('can_delete')">
                         <div class="row-flex alc gap-1rem jsc">
-                            <div class="edit edit-color cursor_pointer" (click)="onEdit(data.id)" >
+                            <div class="edit edit-color cursor_pointer" (click)="onEdit(data.id)" title="Edit Form"
+                                *ngIf="permissions.includes('can_edit')">
                                 <span class="material-symbols-outlined font-22">
-                                    edit
+                                    edit_square
                                 </span>
                             </div>
                             <!-- <div class="PopupOverlay" [class.active]="deleteObj.form_id != ''" (click)="deleteObj.form_id =''"></div>
@@ -114,10 +152,15 @@
                                 </div>
 
                             </div> -->
-                            <div class="read view-color cursor_pointer" (click)="deletepopup(data.id)">
+                            <!-- <div class="read view-color cursor_pointer" (click)="deletepopup(data.id)"
+                                *ngIf="permissions.includes('can_delete')" title="Delete Form">
                                 <span class="material-symbols-outlined font-22">
                                     delete
                                 </span>
+                            </div> -->
+                            <div class="delete delete-color cursor_pointer" (click)="deletepopup(data.id)"
+                                *ngIf="permissions.includes('can_delete')">
+                                <span class="material-symbols-outlined font-22"> delete </span>
                             </div>
                             <!-- <div class="delete delete-color cursor_pointer">
                                 <span class="material-symbols-outlined font-22"> delete </span>
@@ -144,13 +187,7 @@
                     <td>
                         <p class="bold shine line">&nbsp; </p>
                     </td>
-                    <td>
-                        <p class="bold shine line">&nbsp; </p>
-                    </td>
-                    <td>
-                        <p class="bold shine line">&nbsp; </p>
-                    </td>
-                    <td>
+                    <td *ngIf="permissions.includes('can_edit') &&  permissions.includes('can_delete')">
                         <p class="bold shine line">&nbsp; </p>
                     </td>
                 </tr>
@@ -161,6 +198,57 @@
                 </tr>
             </tbody>
         </table>
+
+        <!-- Pagination -->
+        <ng-container *ngIf="form_List && form_List.length > 0 && !isLoading">
+            <!-- <ng-container> -->
+            <!-- <p>Test</p> -->
+            <ul *ngIf="usersPager.pages && usersPager.pages.length > 1" class="pagination" style="margin-top: 2rem">
+                <!-- <ul class="pagination" style="margin-top: 10rem"> -->
+                <ng-container *ngIf="usersPager.currentPage > 1">
+                    <li class="page-item pgbtn prev">
+                        <a class="page-link prev-button" (click)="setUsersPage(usersPager.currentPage - 1, 1)"><span
+                                style="font-size:16px" class="material-symbols-outlined">
+                                arrow_back_ios</span></a>
+                    </li>
+                </ng-container>
+                <ng-container *ngIf="usersPager.startPage != 1">
+                    <li class="page-item first">
+                        <a class="page-link" (click)="setUsersPage(1, 1)">1</a>
+                    </li>
+                </ng-container>
+                <ng-container *ngIf="usersPager.startPage != 1">
+                    <li class="dots">
+                        <a class="page-link">...</a>
+                    </li>
+                </ng-container>
+                <li class="page-item" *ngFor="let page of usersPager.pages"
+                    [ngClass]="{ active: usersPager.currentPage === page }">
+                    <a class="page-link" (click)="setUsersPage(page, 1)">{{
+                        page
+                        }}</a>
+                </li>
+                <ng-container *ngIf="usersPager.endPage != usersPager.totalPages">
+                    <li class="dots">
+                        <a class="page-link">...</a>
+                    </li>
+                </ng-container>
+                <ng-container *ngIf="usersPager.endPage != usersPager.totalPages">
+                    <li class="page-item last">
+                        <a class="page-link" (click)="setUsersPage(usersPager.totalPages, 1)">{{
+                            usersPager.totalPages }}</a>
+                    </li>
+                </ng-container>
+                <ng-container *ngIf="usersPager.currentPage < usersPager.totalPages">
+                    <li class="page-item pgbtn next">
+                        <a class="page-link next-button" (click)="setUsersPage(usersPager.currentPage + 1, 1)"><span
+                                class="material-symbols-outlined">
+                                navigate_next</span></a>
+                    </li>
+                </ng-container>
+            </ul>
+        </ng-container>
+
         <div class="PopupOverlay" [class.active]="deleteObj.form_id != ''" (click)="deleteObj.form_id =''"></div>
         <div class="statusPopup" [class.active]="deleteObj.form_id != ''">
             <div class="inner-flex inner-flex-medium">
@@ -180,6 +268,7 @@
             </div>
 
         </div>
+
         <!-- <button (click)="prevPage()" [disabled]="formObj.page === 1">Previous</button>
         <span>Page {{formObj.page}}</span>
         <button (click)="nextPage()" [disabled]="formObj.page * formObj.limit >= formObj.total">Next</button> -->

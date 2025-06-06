@@ -10,7 +10,7 @@ import { LoginComponent } from './login/login.component';
 import { RegisterUserComponent } from './register-user/register-user.component';
 import { AddFormsComponent } from './add-forms/add-forms.component';
 import { FormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 import { AddUserComponent } from './user/add-user/add-user.component';
 import { ListUserComponent } from './user/list-user/list-user.component';
@@ -20,6 +20,11 @@ import { ToastrModule } from 'ngx-toastr';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AddDynamicFormComponent } from './dynamic-forms/add-dynamic-form/add-dynamic-form.component';
 import { ListDynamicFormComponent } from './dynamic-forms/list-dynamic-form/list-dynamic-form.component';
+import { DatePipe } from '@angular/common';
+import { ChangePasswordComponent } from './change-password/change-password.component';
+import { NgxDaterangepickerMd } from 'ngx-daterangepicker-material';
+import { MyProfileComponent } from './my-profile/my-profile.component';
+import { AuthInterceptor } from './auth/auth.interceptor';
 
 @NgModule({
   declarations: [
@@ -34,7 +39,9 @@ import { ListDynamicFormComponent } from './dynamic-forms/list-dynamic-form/list
     AddUserComponent,
     ListUserComponent,
     AddDynamicFormComponent,
-    ListDynamicFormComponent
+    ListDynamicFormComponent,
+    ChangePasswordComponent,
+    MyProfileComponent
   ],
   imports: [
     BrowserModule,
@@ -43,6 +50,7 @@ import { ListDynamicFormComponent } from './dynamic-forms/list-dynamic-form/list
     HttpClientModule,
     NgSelectModule,
     BrowserAnimationsModule,
+    NgxDaterangepickerMd.forRoot(),
     ToastrModule.forRoot({
       timeOut: 3000,
       positionClass: 'toast-bottom-right',
@@ -52,7 +60,13 @@ import { ListDynamicFormComponent } from './dynamic-forms/list-dynamic-form/list
     }),
   ],
   providers: [
-    PagerService
+    PagerService,
+    DatePipe,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,  // Register the interceptor
+      multi: true                 // Allows multiple interceptors
+    }
   ],
   bootstrap: [AppComponent]
 })

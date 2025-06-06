@@ -1,46 +1,49 @@
 <div class="app_wrapper">
-  <div class="main-sidebar">
-    <div class="tab-container">
-      <div class="logo">
-        <h2 class="text-center">Admin Panel</h2>
-        <!-- <img src="assets/images/dark-logo.svg" alt="" /> -->
-      </div>
-      <div class="nav-tabs">
-        <div class="tabs">
-          <button [routerLink]="'/dashboard'" (click)="setTab('dashboard')" [class.active]="activeTab == 'dashboard'">
-            <div class="home-main">
-              <div class="home-icon">
-                <span class="material-symbols-outlined"> dashboard </span>
-              </div>
-              <div class="home-title font-16">Dashboard</div>
+    <div class="main-sidebar">
+        <div class="tab-container">
+            <div class="logo">
+                <h2 class="font-22" style="margin-left: 1.2rem;">Admin Panel</h2>
+                <!-- <img src="assets/images/dark-logo.svg" alt="" /> -->
             </div>
-          </button>
-          <button [routerLink]="'/users'" (click)="setTab('users')" [class.active]="activeTab == 'users'">
-            <div class="home-main">
-              <div class="home-icon">
-                <span class="material-symbols-outlined"> account_circle </span>
-              </div>
-              <div class="home-title font-16">User</div>
-            </div>
-          </button>
-          <button [routerLink]="'/inquiry'" (click)="setTab('inquiry')" [class.active]="activeTab == 'inquiry'">
-            <div class="home-main">
-              <div class="home-icon">
-                <span class="material-symbols-outlined"> view_list </span>
-              </div>
-              <div class="home-title font-16">Inquiry</div>
-            </div>
-          </button>
-          <button [routerLink]="'/list-form'" (click)="setTab('List Form')"
-            [class.active]="activeTab == 'List Form'">
-            <div class="home-main">
-              <div class="home-icon">
-                <span class="material-symbols-outlined"> list_alt </span>
-              </div>
-              <div class="home-title font-16">Form</div>
-            </div>
-          </button>
-          <!-- <button (click)="setTab('home')" [class.active]="activeTab === 'home'">
+            <div class="nav-tabs">
+                <div class="tabs">
+                    <button [routerLink]="'/dashboard'" (click)="setTab('dashboard')"
+                        [class.active]="activeTab == 'dashboard'" *ngIf="permissions.includes('dashboard')">
+                        <div class="home-main">
+                            <div class="home-icon">
+                                <span class="material-symbols-outlined"> dashboard </span>
+                            </div>
+                            <div class="home-title font-16">Dashboard</div>
+                        </div>
+                    </button>
+                    <button [routerLink]="'/users'" (click)="setTab('users')" [class.active]="activeTab == 'users'"
+                        *ngIf="permissions.includes('users')">
+                        <div class="home-main">
+                            <div class="home-icon">
+                                <span class="material-symbols-outlined"> account_circle </span>
+                            </div>
+                            <div class="home-title font-16">User</div>
+                        </div>
+                    </button>
+                    <button [routerLink]="'/list-form'" (click)="setTab('List Form')"
+                        [class.active]="activeTab == 'List Form'" *ngIf="permissions.includes('list-form')">
+                        <div class="home-main">
+                            <div class="home-icon">
+                                <span class="material-symbols-outlined"> contract_edit </span>
+                            </div>
+                            <div class="home-title font-16">Form</div>
+                        </div>
+                    </button>
+                    <button [routerLink]="'/inquiry'" (click)="setTab('inquiry')"
+                        [class.active]="activeTab == 'inquiry'" *ngIf="permissions.includes('inquiry')">
+                        <div class="home-main">
+                            <div class="home-icon">
+                                <span class="material-symbols-outlined"> live_help </span>
+                            </div>
+                            <div class="home-title font-16">Inquiry</div>
+                        </div>
+                    </button>
+                    <!-- <button (click)="setTab('home')" [class.active]="activeTab === 'home'">
             <div class="home-main">
               <div class="home-icon">
                 <span class="material-symbols-outlined"> analytics </span>
@@ -138,45 +141,112 @@
               <div class="home-title">ToDo</div>
             </div>
           </button> -->
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
 
-    <div class="profile">
-      <div class="profile-img">
-        <img src="assets/images/user-1.jpg" alt="" />
-      </div>
-      <div class="profile-detail inner-flex">
-        <!-- <h4>Admin</h4> -->
-        <h4 class="capitalize">{{ adminService.getTokenData() ? adminService.getTokenData().name : "User"}}</h4>
-        <!-- <p>Designer</p> -->
-        <p class="font-12">{{ adminService.getTokenData() ? adminService.getTokenData().designation : ""}}</p>
-      </div>
-      <div class="profile-logout cursor_pointer" (click)="logout()">
-        <span class="material-symbols-outlined"> power_settings_new </span>
-      </div>
+        <div class="profile">
+            <div class="profile-img">
+                <img src="assets/images/default-user.jpg" alt="" *ngIf="!activeUser.profile_pic" />
+                <img src="{{activeUser.profile_pic}}" alt="" *ngIf="activeUser.profile_pic" />
+            </div>
+            <div class="profile-detail inner-flex">
+                <!-- <h4>Admin</h4> -->
+                <h4 class="capitalize">
+                    {{activeUser.name ? activeUser.name : "User" }}
+                </h4>
+                <!-- <p>Designer</p> -->
+                <p class="font-12">
+                    {{
+                    activeUser.designation
+                    ? activeUser.designation
+                    : ""
+                    }}
+                </p>
+            </div>
+            <div class="profile-logout cursor_pointer" (click)="logout()">
+                <span class="material-symbols-outlined"> power_settings_new </span>
+            </div>
+        </div>
     </div>
-  </div>
-  <div class="router_outlet" #content_wrapper>
-    <div class="flex">
-      <div class="row-flex alc gap-1rem">
-        <img src="assets/images/user-1.jpg" alt="" />
-        <!-- <span  class="material-symbols-outlined"> account_circle </span> -->
-        <!-- <h2 class="font-16">Admin</h2> -->
-        <h2 class="font-16 capitalize"> {{ adminService.getTokenData() ? adminService.getTokenData().name : "User"}}
-        </h2>
-      </div>
-      <!-- <div class="logout cursor_pointer" (click)="logout()">
-        <span _ngcontent-ntx-c3="" class="material-symbols-outlined">
-          logout
-        </span>
-      </div> -->
-    </div>
-    <!-- <ng-container *ngIF></ng-container> -->
+    <div class="flex menu-container">
+        <div class="row-flex alc jse cursor_pointer relative">
+            <div class="user-img" (click)="toggleMenu($event)">
+                <img src="{{activeUser.profile_pic}}" alt="User" *ngIf="activeUser.profile_pic" />
+                <img src="assets/images/default-user.jpg" alt="User" *ngIf="!activeUser.profile_pic" />
+            </div>
+            <div class="dropdown-absolute" [class.show]="menuVisible">
+                <div class="user-profile-1 inner-flex">
+                    <h2 class="font-18 color-gray">User Profile</h2>
+                    <div class="row-flex alc gap-1rem border-bottom">
+                        <div class="user-img-2">
+                            <img src="{{activeUser.profile_pic}}" alt="User" *ngIf="activeUser.profile_pic" />
+                            <img src="assets/images/default-user.jpg" alt="User" *ngIf="!activeUser.profile_pic" />
+                        </div>
+                        <div class="details inner-flex line-height-1">
+                            <h6 class="capitalize font-14 color-gray">
+                                {{
+                                activeUser.name
+                                ? activeUser.name
+                                : "User"
+                                }}
+                            </h6>
+                            <p class="font-14 fw-400 color-gray">
+                                {{
+                                activeUser.designation
+                                ? activeUser.designation
+                                : ""
+                                }}
+                            </p>
+                            <div class="row-flex alc">
+                                <div class="email font-14 fw-400 color-gray">
+                                    <span class="material-symbols-outlined font-14">
+                                        mail
+                                    </span>
+                                </div>
+                                <p class="font-14 fw-400 color-gray">
+                                    {{
+                                    activeUser.email
+                                    ? activeUser.email
+                                    : ""
+                                    }}
+                                </p>
+                            </div>
+                            <!-- <a routerLink="/change-password" class="font-14 fw-400 color-gray">Change Password ?</a> -->
+                            <!-- <div></div> -->
+                        </div>
+                    </div>
+                    <a [routerLink]="[ '/profile' ]" (click)="closeMenu($event)">
+                        <div class="user-profile-2 row-flex gap-1rem cursor_pointer">
+                            <div class="user-img-3">
+                                <img src="assets/images/icon-account.svg" alt="" />
+                            </div>
+                            <div class="inner-flex my-profile">
+                                <p class="font-14 color-gray line-height-1">My Profile</p>
+                                <p class="font-14 color-gray line-height-1">Account Settings</p>
+                            </div>
+                        </div>
+                    </a>
+                    <button (click)="logout()" class="user-btn">Logout</button>
+                    <button routerLink="/change-password" (click)="closeMenu($event)" class="user-btn">Change
+                        Password</button>
+                </div>
+            </div>
+        </div>
 
-    <!-- <h2 class="heading_text tab_name font-18">{{ activeTabName }} <span *ngIf="activeTabName == 'Dashboard'"> {{ inquiryCount }}</span> </h2> -->
-    <div class="outlet_container">
-      <router-outlet></router-outlet>
+        <!-- <div class="logout cursor_pointer" (click)="logout()">
+      <span _ngcontent-ntx-c3="" class="material-symbols-outlined">
+        logout
+      </span>
+    </div> -->
     </div>
-  </div>
+    <div class="router_outlet" #content_wrapper>
+        <!-- <ng-container *ngIF></ng-container> -->
+
+        <!-- <h2 class="heading_text tab_name font-18">{{ activeTabName }} <span *ngIf="activeTabName == 'Dashboard'"> {{ inquiryCount }}</span> </h2> -->
+        <div class="outlet_container">
+            <router-outlet></router-outlet>
+        </div>
+
+    </div>
 </div>

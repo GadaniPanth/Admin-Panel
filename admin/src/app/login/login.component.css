@@ -1,4 +1,4 @@
-.login-container {
+.login-container, .change-password-container {
     background: white;
     padding: 2.5rem 2rem;
     border-radius: 12px;
@@ -12,8 +12,13 @@
     min-width: 400px;
 }
 
+
 .font-13 {
     font-size: 13px;
+}
+
+.gap-1rem{
+    gap: 1rem;
 }
 
 h2 {

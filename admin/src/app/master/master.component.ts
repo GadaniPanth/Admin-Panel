@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, HostListener, OnInit } from "@angular/core";
 import { AdminService } from "../_services/admin.service";
 import { ActivatedRoute, NavigationEnd, Router } from "@angular/router";
 import { Title } from "@angular/platform-browser";
@@ -18,10 +18,28 @@ export class MasterComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private titleService: Title,
     private toastr: ToastrService
-  ) { }
+  ) {
+    this.getActiveUser();
+  }
 
   // activeTabName: string = "";
   // inquiryCount: number = 0;
+
+  activeUser: any = {
+    name: '',
+    email: '',
+    designation: '',
+    profile_pic: ''
+  };
+
+  getActiveUser() {
+    this.adminService.get_user_details(this.adminService.getTokenData().user_id).subscribe((res) => {
+      this.activeUser.name = res.details.name;
+      this.activeUser.email = res.details.email;
+      this.activeUser.designation = res.details.designation;
+      this.activeUser.profile_pic = res.details.profile_pic ? res.details.profile_pic : 'assets/images/default-user.jpg';
+    });
+  }
 
   ngOnInit() {
     this.router.events
@@ -31,7 +49,25 @@ export class MasterComponent implements OnInit {
       });
 
     this.updateActiveMenu(); // Run initially to set active menu
+
+
+    // p
+
+    this.permissionList = this.adminService.userpermissions;
+    // console.log(this.permissionList);
+
+
+    for (const key in this.permissionList) {
+      if (this.permissionList[key]['can_view'] == 1) {
+        this.permissions.push(this.permissionList[key]['slug'])
+      }
+    }
+
+    //
   }
+
+  permissions: any = []; //
+  permissionList: any; //
 
   updateActiveMenu() {
     let route = this.activatedRoute.firstChild;
@@ -67,4 +103,39 @@ export class MasterComponent implements OnInit {
   setTab(tab: string) {
     this.activeTab = tab;
   }
+
+  menuVisible = false;
+
+  toggleMenu(event: Event): void {
+    event.stopPropagation();
+    this.menuVisible = !this.menuVisible;
+  }
+
+  openMenu(event: Event): void {
+    event.stopPropagation();
+    this.menuVisible = true;
+  }
+
+  closeMenu(event: Event): void {
+    // console.log('hihihi');
+    // event.stopPropagation();
+    this.menuVisible = false;
+  }
+
+  navigateProfile() {
+    this.menuVisible = false;
+    setTimeout(() => {
+      this.router.navigate(['/profile']);
+    }, 100);
+  }
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent): void {
+    const target = event.target as HTMLElement;
+    if (!target.closest('.menu-container')) {
+      this.menuVisible = false;
+    }
+  }
+
+  // changePasssFOrms
 }
